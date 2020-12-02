@@ -1,0 +1,39 @@
+<div class="box-shop">
+  <div class="img-prod custom">
+    <a appLocationHref [url]="'/shops/'+ shop.alias">
+      <img class="card-banner" [src]="shop?.banner?.fileUrl | shopBanner">
+    </a>
+  </div>
+  <div class="text-box-shop custom">
+    <div class="media">
+      <img class="mr-3 card-logo" [src]="shop?.logo?.thumbUrl |
+        shopLogo">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a appLocationHref [url]="'/shops/'+ shop.alias">
+            {{shop?.name}} 
+            <img width="18px" src="../../../../assets/images/trusted/green-tick-mark.png" *ngIf="shop.socialConnected.facebook || shop.socialConnected.google || shop.socialConnected.linkedin || shop.socialConnected.twitter">
+          </a>
+        </h5>
+        <div class="clear">
+          <star-rating [rate]="shop?.ratingAvg" [total]="shop?.totalRating"></star-rating>
+        </div>
+        
+        <ul class="shop-icons-success">
+          <li *ngIf="shop.socialConnected.facebook">
+            <img width="18px" src="../../../../assets/images/trusted/facebook.png">
+          </li>
+          <li *ngIf="shop.socialConnected.google">
+            <img width="18px" src="../../../../assets/images/trusted/google-plus.png">
+          </li>
+          <li *ngIf="shop.socialConnected.twitter">
+            <img width="18px" src="../../../../assets/images/trusted/twitter.png">
+          </li>
+          <li *ngIf="shop.socialConnected.linkedin">
+            <img width="18px" src="../../../../assets/images/trusted/linkedin-icon.png">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

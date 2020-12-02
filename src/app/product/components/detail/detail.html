@@ -1,0 +1,286 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row mar-bot-25">
+      <div class="col-md-6">
+        <div class="slider-for product-slider">
+          <img src="/assets/images/noImage.jpg" width="100%" title="No-Image" *ngIf="!product.images.length">
+          <div *ngIf="product.images.length && activeSlide"
+            [ngStyle]="{'background-image': 'url(' + activeSlide.mediumUrl + ')'}" class="slide-img-custom">
+            <lib-ngx-image-zoom [thumbImage]="activeSlide.mediumUrl" [fullImage]="activeSlide.fileUrl" [enableLens]="true"
+              [lensWidth]="150" [lensHeight]="150" [circularLens]="true">
+            </lib-ngx-image-zoom>
+          </div>
+          <span class="slick-arrow slick-next"
+            (click)="changeSlide(slidePosition + 1);slickModal.slickGoTo(slidePosition)"
+            [hidden]="slidePosition == product.images.length - 1 || product.images.length == 1 || !product.images.length"></span>
+          <span class="slick-arrow slick-prev"
+            (click)="changeSlide(slidePosition - 1);slickModal.slickGoTo(slidePosition)"
+            [hidden]="slidePosition == 0 || product.images.length == 1"></span>
+        </div>
+        <div class="ps-list" [hidden]="!product.images.length">
+          <ngx-slick-carousel class="carousel carousel-row" #slickModal="slick-carousel" [config]="slideConfig">
+            <div ngxSlickItem *ngFor="let slide of product.images, let i = index" class="slide">
+              <img [src]="slide.thumbUrl" alt="" width="100%" [ngClass]="{'active': slidePosition === i}"
+                (click)="changeSlide(i)">
+            </div>
+          </ngx-slick-carousel>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="box-detail product-information">
+          <h5>Product For {{(product.transactiontype && product.transactiontype != 'Buy')?product?.transactiontype?.name:'Purchase'}}</h5>
+          <hr/>
+          <h2>{{product?.name}}</h2>
+          <div class="rate-seller">
+            <star-rating [rate]="product.ratingAvg" [total]="product?.totalRating"></star-rating>
+          </div>
+          <div translate>Shop:
+            <strong>
+              <a appLocationHref [url]="'/shops/'+ product.shop.alias">
+                {{product?.shop?.name}}
+              </a>
+            </strong>
+          </div>
+          <!-- <div translate>Product Type:
+            <strong>
+                {{(product.transactiontype)?product?.transactiontype?.name:'Buy'}}
+            </strong>
+          </div> -->
+          <div translate *ngIf="isProductRentAndShare">Price Per Day:
+            <strong>
+                {{pricePerDay | currency | async}}
+            </strong>
+          </div>
+          <div translate *ngIf="isProductRentAndShare">Price Per Week:
+            <strong>
+                {{pricePerWeek | currency | async}}
+            </strong>
+          </div>
+          <div translate *ngIf="isProductRentAndShare">Price Per Month:
+            <strong>
+                {{pricePerMonth | currency | async}}
+            </strong>
+          </div>
+          <div translate *ngIf="!isProductRentAndShare">Instock:
+            <span *ngIf="stockQuantity"><strong>{{stockQuantity | number}}</strong></span>
+            <span *ngIf="!stockQuantity" class="badge badge-danger" translate><strong>SOLD OUT!</strong></span>
+          </div>
+          <div>
+            <span translate class="mar-right-5">Tax:&nbsp;</span> 
+            <span *ngIf="product.taxClass && product.taxPercentage"><strong> {{product?.taxClass}}
+              {{product?.taxPercentage}}%</strong></span>
+            <span *ngIf="!product.taxPercentage"> <strong>0%</strong></span>
+          </div>
+          <div class="depositAmount" *ngIf="product.depositAmont">
+            Deposit Amount: <strong>{{product.depositAmont | currency | async}}</strong>
+          </div>
+          <hr />
+          <div [innerHtml]="product?.shortDescription | safeHtml"></div>
+          
+          <hr />
+          <div class="row mar-bot-25" >
+            <div class="col-sm-12">
+            <h5 translate>Price Breakdown :</h5>
+            <span translate>Base Price :</span> {{basePrice | currency | async}}<br/>
+            <span translate>Tax Price :</span> {{vatBasePrice | currency | async}}<br/>
+            <span translate *ngIf="isProductRentAndShare && product.depositAmont">Deposit : {{product.depositAmont | currency | async}}</span>
+            </div>
+          </div>
+          <hr/>
+          <div class="prod-variants">
+            <div class="price-detial" *ngIf="salePrice">
+              <span class="salePrice-format">{{salePrice | currency | async}}
+                
+              </span>
+              <ng-container *ngIf="rentDurationText">({{rentDurationText}})</ng-container>
+              <span *ngIf="product?.freeShip" translate>Free Shipping</span>
+              <div class="through-line">
+                {{price | currency | async}} <span class="discount-text">{{discountVal}}% <a translate>OFF</a></span>
+              </div>
+            </div>
+            <div class="price-detial" *ngIf="!salePrice">
+              <span class="salePrice-format">{{price | currency | async}}</span>
+              <span *ngIf="product?.freeShip" translate>Free Shipping</span>
+            </div>
+            <div class="mar-bot-15" *ngIf="variants.length">
+              <button type="button" class="collapse-btn" (click)="openVariant()">Variants <i class="fa fa-bars"
+                  *ngIf="!isShowVar"></i><i class="fa fa-close" *ngIf="isShowVar"></i>
+              </button>
+            </div>
+            
+            <div class="row" *ngIf="isShowVar">
+              <div class="col-sm-6 mar-bot-10" *ngFor="let item of variants; let i = index"
+                (click)="selectVariant(item, i)">
+                <div class="variant-option">
+                  <p *ngFor="let option of item.options">
+                    <strong>{{option?.displayText || options?.key}}</strong>: {{option?.value}}
+                  </p>
+                  <span class="badge badge-warning stock-brand">
+                    {{item?.stockQuantity | number}}
+                    <span translate>in stock!</span>
+                  </span>
+                  <span class="badge badge-success check-icon" *ngIf="item.isSelected"><i
+                      class="fa fa-check"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quantity" *ngIf="stockQuantity && !isProductRentAndShare">
+            <span translate>Quantity:</span> <input (keypress)="onlyNumberKey($event)" type="number" min="1"
+              max="{{stockQuantity}}" [(ngModel)]="quantity" name="quantity" [disabled]="isProductRentAndShare" />
+          </div>
+          <div class="row mar-bot-25" *ngIf="product.distance" >
+            <div class="col-sm-12">
+              <span translate><b>Check available in your Area</b></span>
+            </div>
+            <div class="col-sm-12" >
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" [(ngModel)]="zipcode"  placeholder="Enter zipcode">
+                <div class="input-group-append">
+                  <span class="input-group-text mt-0 bg-success text-white pointer" (click)="areaCheck()">Check</span>
+                </div>
+              </div>
+              <div *ngIf="deliveryStatus">
+                <p class="small text-danger" *ngIf="!deliverable">This Product is not available in this Area.</p>
+                <p class="small text-success" *ngIf="deliverable">This Product is available.</p>
+              </div>
+              
+            </div>
+          </div>
+          <div class="row mar-bot-25" *ngIf="isProductRentAndShare">
+           
+            <div class="col-sm-12">
+              <span translate><b>Check Availability</b></span>
+            </div>
+            <div class="col-sm-6">
+              <input class="form-control" placeholder="From Date"
+              name="dp" [(ngModel)]="fromDate" ngbDatepicker [markDisabled]="isDisabled" [minDate]="minDate" [maxDate]="maxDate" [footerTemplate]="footerFromTemplate" [dayTemplate]="customStartDay" #df="ngbDatepicker" (click)="df.toggle()" (dateSelect)="onAvailableChange($event)">
+
+                <ng-template #customStartDay let-date let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled" let-focused="focused">
+                  <span class="custom-day" [class.weekend]="isBooked(date)" [class.focused]="focused"
+                        [class.bg-primary]="selected" [class.hidden]="date.month !== currentMonth" [class.text-muted]="disabled">
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+                <ng-template #footerFromTemplate>
+                  <hr class="my-0">
+                  <button class="btn btn-primary btn-sm m-2 float-left" (click)="model = today; df.close()">Today</button>
+                  <button class="btn btn-secondary btn-sm m-2 float-right" (click)="df.close()">Close</button>
+                </ng-template>
+            </div>
+
+            <div class="col-sm-6">
+              <input class="form-control" placeholder="To Date"
+              name="dp" [(ngModel)]="toDate" ngbDatepicker [minDate]="minDate" [markDisabled]="isDisabled" [maxDate]="maxDate" [footerTemplate]="footerToTemplate" [dayTemplate]="customToDay" #dt="ngbDatepicker" (click)="dt.toggle()" (dateSelect)="onAvailableChange($event)">
+                <ng-template #customToDay let-date let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled" let-focused="focused">
+                  <span class="custom-day" [class.weekend]="isBooked(date)"  [class.focused]="focused"
+                        [class.bg-primary]="selected" [class.hidden]="date.month !== currentMonth" [class.text-muted]="disabled">
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+                <ng-template #footerToTemplate>
+                  <hr class="my-0">
+                  <button class="btn btn-primary btn-sm m-2 float-left" (click)="model = today; dt.close()">Today</button>
+                  <button class="btn btn-secondary btn-sm m-2 float-right" (click)="dt.close()">Close</button>
+                </ng-template>
+            </div>
+
+          </div>
+          <div class="button-detail">
+            <button class="btn-add-cart" (click)="addCart()"
+              *ngIf="product.stockQuantity && !isVariant || isVariant && selectedVariant.stockQuantity" 
+              [disabled]="!isProductAvailableOnDateRange" translate>
+              <span *ngIf="!isProductRentAndShare">ADD TO CART</span>
+              <span *ngIf="isProductRentAndShare">CHECKOUT</span>
+              </button>&nbsp;
+            <button class="btn-wishlist" (click)="addWishList(product)" translate><i class="fa fa-heart text-danger"></i> ADD TO WISHLIST</button> &nbsp;
+            <send-message-btn [hidden]="product.shop?.ownerId === userID" [recipientId]="product.shop?.ownerId">
+            </send-message-btn>
+            <hr>
+            <div class="text-center">
+              <div class="share-icons">
+                <span translate>Share:</span>
+                <button shareButton="facebook" [image]="product?.mainImage" [description]="product?.shortDescription"><i
+                    class="fa fa-facebook-square"></i></button>
+                <button shareButton="twitter" [image]="product?.mainImage" [description]="product?.shortDescription"><i
+                    class="fa fa-twitter-square"></i></button>
+                <button shareButton="google" [image]="product?.mainImage" [description]="product?.shortDescription"><i
+                    class="fa fa-google"></i></button>
+                <!-- TODO add more button social btn here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <ul class="nav nav-tabs products-tab">
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'detail'" [ngClass]="{active: tab === 'detail'}"
+              translate>Information</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'shippingPolicy'" [ngClass]="{active: tab === 'shippingPolicy'}"
+              translate>Shipping
+              Policy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'refundPolicy'" [ngClass]="{active: tab === 'refundPolicy'}"
+              translate>Refund
+              Policy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'reviews'" [ngClass]="{active: tab === 'reviews'}" translate>Reviews
+              <span>({{product?.totalRating|number}})</span></a>
+          </li>
+        </ul>
+
+        <div class="prod-description pt-3 pb-3" [hidden]="tab !== 'detail'">
+          <h5 class="prd-title" translate>Information</h5>
+          <div class="mar-top-15" [innerHTML]="product?.description | safeHtml"></div>
+          <div *ngIf="!product?.description">
+            <p>No description for product!</p>
+          </div>
+          <div class="clear"></div>
+          <h5 translate *ngIf="product?.specifications?.length" class="prd-title">Specifications</h5>
+          <div class="table-responsive">
+            <table class="table table-condensed mar-top-15" *ngIf="product?.specifications?.length">
+              <tr *ngFor="let spec of product.specifications">
+                <td width="200">
+                  <strong>{{spec?.key}}</strong>
+                </td>
+                <td>{{spec?.value}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="pb-3" [hidden]="tab !== 'reviews'">
+          <review-list [options]="{productId: product?._id, type: 'product'}"></review-list>
+        </div>
+
+        <div class="prod-description pt-3 pb-3" [hidden]="tab !== 'shippingPolicy'">
+          <p class="pre-line">{{product?.shop?.shippingSettings?.shippingPolicy}}</p>
+          <div *ngIf="!product.shop.shippingSettings.shippingPolicy">
+            <p>No shipping policy for product!</p>
+          </div>
+        </div>
+        <div class="prod-description pt-3 pb-3" [hidden]="tab !== 'refundPolicy'">
+          <p class="pre-line">{{product?.shop?.shippingSettings?.refundPolicy}}</p>
+          <div *ngIf="!product.shop.shippingSettings.refundPolicy">
+            <p>No refund policy for product!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="title-main">
+      <h4 translate>Related goods</h4>
+    </div>
+    <div class="body-box-main">
+      <featured-products [options]="{productId: product?._id}"></featured-products>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<a class="btn btn-success text-white " type="button"  role="button" (click)="openModal()"  translate>Buy us A Coffee</a>
+
+<!-- Modal -->
+<div class="modal" #buyCoffeeModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Buy us a Coffee!</h4>
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="row">
+          
+          <div class="col-12 mt-2">
+            <form [formGroup]="stripeTest" (submit)="onSubmit()">
+              <div class="form-group">
+                <label translate>Card holder name</label>
+                <input type="text" formControlName="cardName" placeholder="Jane Doe" class="form-control" name="cardHolderName" />
+              </div>
+              <div class="form-group" >
+                <div class="row ">
+                  <div class="col-6">
+                    <label translate>Amount (1-100)$</label>
+                  </div>
+                  <div class="col-6">
+                    <input type="number" formControlName="amount" (keypress)="onKeyPress($event)"  (change)="onChangeAmount($event)" placeholder="10" class="form-control" name="amount" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group border rounded pt-2 pb-2">
+                <ngx-stripe-card  [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-success">Donate</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

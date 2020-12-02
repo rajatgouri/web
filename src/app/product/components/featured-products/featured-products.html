@@ -1,0 +1,8 @@
+<div class="list-product slider-product">
+  <ngx-slick-carousel class="carousel carousel-row" #slickModal="slick-carousel" [config]="slideConfig">
+    <div ngxSlickItem *ngFor="let item of items" class="item-slider-pro">
+      <product-card [product]="item" [showDeal]="1" [hidden]="!showDeal"></product-card>
+      <product-card [product]="item" [hidden]="showDeal"></product-card>
+    </div>
+  </ngx-slick-carousel>
+</div>

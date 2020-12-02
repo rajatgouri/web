@@ -1,0 +1,247 @@
+.slide-banner-new {
+  .carousel.carousel-row {
+    .slick-list {
+      height: 500px;
+      overflow: hidden;
+
+      .slide {
+        img {
+          max-height: 100%;
+        }
+      }
+    }
+
+    .slick-dots {
+      bottom: 0px;
+
+      li {
+        background: #fdb45e;
+        margin: 0;
+
+        button {
+          &::before {
+            font-size: 14px;
+            color: #fff;
+          }
+        }
+
+        &:first-child {
+          border-top-left-radius: 3px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 3px;
+        }
+      }
+
+      li.slick-active {
+        button {
+          &::before {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
+
+.deal-time {
+  font-size: 13px;
+  font-style: italic;
+
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    font-style: normal;
+  }
+}
+
+.shop-new-custom {
+  padding-bottom: 15px;
+
+  .search-shop-bar {
+    display: inline-block;
+    width: 100%;
+    padding: 0 15px;
+
+    .input-group.mb-3.product-search-form {
+      max-width: 225px;
+      float: right;
+    }
+  }
+
+  .fb-profile-block {
+    margin: auto;
+    position: relative;
+  }
+
+  .fb-profile-block-thumb {
+    display: block;
+    height: 315px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    -webkit-filter: grayscale(40%);
+    filter: grayscale(40%);
+  }
+
+  .fb-profile-block-menu {
+    border: 1px solid #d3d6db;
+    border-radius: 0 0 3px 3px;
+  }
+
+  .profile-img a {
+    bottom: 20px;
+    box-shadow: none;
+    display: block;
+    left: 15px;
+    padding: 1px;
+    position: absolute;
+    height: 160px;
+    width: 160px;
+    background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+    z-index: 9;
+  }
+
+  .profile-img img {
+    background-color: rgba(255, 255, 255, .6);
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.07);
+    height: 158px;
+    padding: 5px;
+    width: 158px;
+  }
+
+  .profile-name {
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    padding-left: 200px;
+    bottom: 92px;
+  }
+
+  .profile-name h2 {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 30px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px #f20027;
+  }
+
+  .fb-profile-block-menu {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .block-menu {
+    padding: 8px 0 0 205px;
+    display: inline-block;
+    width: 100%;
+    font-style: italic;
+
+    h4 {
+      font-size: 16px;
+
+      a {
+        font-size: 15px;
+      }
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fdb45e;
+      text-align: center;
+    }
+  }
+
+  .block-menu-text {
+    width: 85%;
+    float: left;
+  }
+
+  .block-menu-button {
+    width: 15%;
+    float: right;
+
+    a {
+      margin-left: 30px;
+      color: #fdb45e;
+
+      i {
+        font-size: 18px;
+      }
+
+      &:hover {
+        color: red;
+      }
+    }
+
+    div {
+      float: right;
+      padding: 10px;
+    }
+  }
+
+}
+
+.mar-right-15 {
+  margin-right: 15px;
+}
+
+.shop-icons-success {
+  li {
+    display: inline-block;
+    // padding: 0 5px;
+    font-size: 18px;
+    margin-right: 10px;
+
+    i {
+      pointer-events: none;
+    }
+  }
+}
+
+.input-group-prepend.lang-dropdown {
+  line-height: 48px;
+  margin-left: 20px;
+
+  button.flag-dropdown {
+    border: none;
+
+    &:hover {
+      background: none;
+      color: #333;
+    }
+  }
+}
+
+.line-height-51 {
+  line-height: 51px;
+}
+
+.collapse-btn {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 15px;
+  outline: none !important;
+  font-weight: 600;
+}
+
+.dropdown-menu.show.drop-menu-lang {
+  right: 0 !important;
+}
+
+.btn.btn-outline-secondary.search-button-1 {
+  background: #333;
+  color: #fff
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.pre-line {
+  white-space: pre-line;
+}

@@ -1,0 +1,154 @@
+<div class="container pad-30-0">
+  <div class="shop-new-custom">
+    <div class="fb-profile-block">
+      <div class="fb-profile-block-thumb">
+        <img height="100%" width="100%" [src]="shop?.banner?.fileUrl | shopBanner" alt="cover-banner">
+      </div>
+      <div class="profile-img">
+        <a [ngStyle]="{marginBottom: socialConnect ? '28px' : 0}"><img [src]="shop?.logo?.mediumUrl | shopLogo" alt="cover-logo"></a>
+      </div>
+      <div class="profile-name" [ngStyle]="{marginBottom: socialConnect ? '28px' : 0}">
+        <h2>{{shop?.name}}</h2>
+      </div>
+      <div class="fb-profile-block-menu">
+        <div class="block-menu">
+          <div class="block-menu-text">
+            <div>
+              <h4 style="padding-right: 25px">
+                <span class="mar-right-15"><i class="fa fa-phone"></i>&nbsp;{{shop?.phoneNumber}}</span>
+                <span class="mar-right-15"><i class="fa fa-envelope"></i>&nbsp;
+                  <a href="mailto:{{shop?.email}}" target="_top">{{shop?.email}}</a></span>
+                <i class="fa fa-map-marker"></i>&nbsp;{{shop?.address}}
+              </h4>
+            </div>
+            <h4 [hidden]="!socialLink">
+              <ul class="shop-icons-success">
+                Social link:
+                <li *ngIf="shop.socials.facebook">
+                  <a [href]="shop.socials.facebook" target="_blank">
+                    <img width="18px" src="../../../../assets/images/trusted/facebook.png">
+                  </a>
+                </li>
+                <li *ngIf="shop.socials.google">
+                  <a [href]="shop.socials.google" target="_blank">
+                    <img width="18px" src="../../../../assets/images/trusted/google-plus.png">
+                  </a>
+                </li>
+                <li *ngIf="shop.socials.twitter">
+                  <a [href]="shop.socials.twitter" target="_blank">
+                    <img width="18px" src="../../../../assets/images/trusted/twitter.png">
+                  </a>
+                </li>
+                <!-- <li *ngIf="shop.socials.linkedin">
+                  <a [href]="shop.socials.linkedin" target="_blank">
+                    <i class="fa fa-linkedin"></i>&nbsp;
+                  </a>
+                </li> -->
+                <li *ngIf="shop.socials.youtube">
+                  <a [href]="shop.socials.youtube" target="_blank">
+                    <img width="18px" src="../../../../assets/images/trusted/youtube.png">
+                  </a>
+                </li>
+                <li *ngIf="shop.socials.instagram">
+                  <a [href]="shop.socials.instagram" target="_blank">
+                      <img width="18px" src="../../../../assets/images/trusted/instagram.png">
+                  </a>
+                </li>
+                <!-- <li *ngIf="shop.socials.flickr">
+                  <a [href]="shop.socials.flickr" target="_blank">
+                    <i class="fa fa-flickr"></i>&nbsp;
+                  </a>
+                </li> -->
+              </ul>
+            </h4>
+            <ul class="shop-icons-success" [hidden]="!socialConnect">
+              Trusted Connection:
+              <li>
+                <img width="18px" src="../../../../assets/images/trusted/green-tick-mark.png">
+              </li>
+            </ul>
+          </div>
+          <div class="block-menu-button">
+            <star-rating [rate]="shop?.ratingAvg" [total]="shop?.totalRating"></star-rating>&nbsp;
+            <a title="Report the shop" (click)="report()"><i class="fa fa-flag"></i></a>
+            <br>
+            <div>
+              <send-message-btn [hidden]="shop.ownerId === userID" [recipientId]="shop?.ownerId"></send-message-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center" [hidden]="!shop?.announcement">
+      <p class="badge badge-danger badge-announcement"><i class="fa fa-bullhorn"></i> {{shop?.announcement}}</p>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <ul class="nav nav-tabs products-tab">
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'products'" [ngClass]="{active: tab === 'products'}" translate>Products
+              <span>({{totalProducts|number}})</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'shippingPolicy'" [ngClass]="{active: tab === 'shippingPolicy'}"
+              translate>Shipping
+              Policy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'refundPolicy'" [ngClass]="{active: tab === 'refundPolicy'}" translate>Refund
+              Policy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="tab = 'reviews'" [ngClass]="{active: tab === 'reviews'}" translate>Reviews
+              <span>({{shop?.totalRating|number}})</span></a>
+          </li>
+        </ul>
+
+        <div *ngIf="tab === 'products'">
+          <div class="row">
+            <div class="search-shop-bar">
+              <div class="input-group mb-3 product-search-form">
+                <input type="text" class="form-control" name="productSearch" placeholder="{{'Search products' | translate}}"
+                  (keypress)="keyPress($event)" [(ngModel)]="searchFields.q" />
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" (click)="query()">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3" *ngFor="let product of products">
+              <product-card [product]="product" [isOwner]="product.shop._id ? product.shop._id === shop._id : false"></product-card>
+            </div>
+            <div class="col-md-12" *ngIf="!totalProducts">
+              <p class="badge badge-warning" translate>There is no product yet..</p>
+            </div>
+            <div class="col-md-12" [hidden]="totalProducts < take">
+              <div class="pull-right">
+              <ngb-pagination [collectionSize]="totalProducts" [(page)]="page" [maxSize]="5" [pageSize]="take"
+                (pageChange)="query()"></ngb-pagination>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="tab === 'reviews'">
+          <review-list [options]="{shopId: shop?._id, type: 'shop'}"></review-list>
+        </div>
+
+        <div class="prod-description pt-3 pb-3" [hidden]="tab !== 'shippingPolicy'">
+          <p class="pre-line">{{shop?.shippingSettings?.shippingPolicy}}</p>
+          <div *ngIf="!shop.shippingSettings.shippingPolicy">
+            <p>No shipping policy for product!</p>
+          </div>
+        </div>
+        <div class="prod-description pt-3 pb-3" [hidden]="tab !== 'refundPolicy'">
+          <p class="pre-line">{{shop?.shippingSettings?.refundPolicy}}</p>
+          <div *ngIf="!shop.shippingSettings.refundPolicy">
+            <p>No refund policy for product!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

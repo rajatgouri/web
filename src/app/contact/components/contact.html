@@ -1,0 +1,37 @@
+<div class="row row-detail-main justify-content-center pad-bt-45">
+  <div class="col-md-4">
+    <div class="card">
+      <article class="card-body login-form">
+        <form #frm="ngForm" (submit)="submit(frm)">
+          <h3 class="box-title m-b-20" translate>Contact us</h3>
+          <div class="form-group">
+            <label translate class="required">Name</label>
+            <input type="text" class="form-control" placeholder="{{'Enter your name' | translate}}" #name="ngModel" name="name" required [(ngModel)]="contact.name" />
+            <div *ngIf="name.errors && (name.dirty || name.touched || submitted)">
+              <p [hidden]="!name.errors.required" class="error" translate> Name is required </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label translate class="required">Email address</label>
+            <input type="text" class="form-control" placeholder="{{'Enter your email' | translate}}" #email="ngModel" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" required [(ngModel)]="contact.email" />
+            <small class="form-text text-muted" translate>We'll never share your email with anyone else.</small>
+            <div *ngIf="email.errors && (email.dirty || email.touched || submitted)">
+              <p [hidden]="!email.errors.required" class="error" translate> Email is required </p>
+              <p [hidden]="!email.errors.pattern" class="error" translate> Email is wrong format </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label translate class="required">Message</label>
+            <textarea placeholder="{{'Enter your message' | translate}}" class="form-control" name="message" #message="ngModel" required [(ngModel)]="contact.message"></textarea>
+            <div *ngIf="message.errors && (name.dirty || message.touched || submitted)">
+              <p [hidden]="!message.errors.required" class="error" translate> Message is required </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="btn btn btn-default" type="submit" translate>Send</button>
+          </div>
+        </form>
+      </article>
+    </div>
+  </div>
+</div>

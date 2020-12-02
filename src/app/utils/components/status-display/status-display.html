@@ -1,0 +1,6 @@
+<span class="badge badge-success" *ngIf="status === 'completed'" translate>Completed</span>
+<span class="badge badge-primary" *ngIf="status === 'shipping'" translate>Shipping</span>
+<span class="badge badge-warning  " *ngIf="status === 'pending'" translate>Pending</span>
+<span class="badge badge-info" *ngIf="status === 'progressing'" translate>Progressing</span>
+<span class="badge badge-warning" *ngIf="status === 'refunded'" translate>Refunded</span>
+<span class="badge badge-danger" *ngIf="status === 'cancelled'" translate>Cancelled</span>

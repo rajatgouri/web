@@ -1,0 +1,116 @@
+<div class="sidebar-overlay" (click)="closeFilter()"></div>
+<!-- <button type="button" class="btn btn-info" (click)="openFilter()" *ngIf="isMobile">
+  <i class="fa fa-filter" aria-hidden="true"></i>
+</button> -->
+
+<div class="left-sidebar" id="{{isMobile?'sidebar':''}}">
+  <div class="title-main">
+    <h2 translate>Categories</h2>
+  </div>
+  <ul class="category-left">
+    <li>
+      <!-- <a data-toggle="collapse" [routerLink]="['/products/search']" [queryParams]="{categoryId: '', shopId: routeId.shopId}"
+        [ngClass]="{'active-a': routeId.categoryId == ''}">
+        <span translate>All Categories</span>
+      </a> -->
+      <a data-toggle="collapse" (click)="filterCategory('all')">
+        <span translate>All Categories</span>
+      </a>
+    </li>
+    <li *ngFor="let category of tree">
+      <a data-toggle="collapse" (click)="filterCategory(category._id)"
+        [ngClass]="{collapsed: !category.showChildren, 'active-a': category._id === routeId.categoryId}">
+        {{category.name}}
+        <span class="badge pull-right" *ngIf="category?.children?.length" (click)="category.showChildren = !category.showChildren">
+          <i class="fa fa-plus" [hidden]="category.showChildren"></i>
+          <i class="fa fa-minus" [hidden]="!category.showChildren"></i>
+        </span>
+      </a>
+      <ul *ngIf="category?.children?.length" [ngClass]="{collapse: !category.showChildren, in: category.showChildren}">
+        <li *ngFor="let child of category.children">
+          <a [routerLink]="['/products/search']" [queryParams]="{categoryId: child._id}" [ngClass]="{'active-a': child._id === routeId.categoryId}">
+            {{child.name}}
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="title-main">
+    <h2><span translate>Featured Shops</span></h2>
+  </div>
+  <ul class="category-left category-shop-left">
+    <li>
+      <!-- <a data-toggle="collapse" [routerLink]="['/products/search']" [queryParams]="{categoryId: routeId.categoryId, shopId: ''}"
+        [ngClass]="{'active-a': routeId.shopId == ''}">
+        <span translate>All Shop</span>
+      </a> -->
+      <a data-toggle="collapse" (click)="filterShop('all')"
+        [ngClass]="{'active-a': routeId.shopId == ''}">
+        <span translate>All Shop</span>
+      </a>
+    </li>
+    <li *ngFor="let item of shops">
+      <!-- <a data-toggle="collapse" [routerLink]="['/products/search']" [queryParams]="{categoryId: routeId.categoryId, shopId: item._id}"
+        [ngClass]="{'active-a': item._id === routeId.shopId}">
+        {{item.name}}
+      </a> -->
+      <a data-toggle="collapse" (click)="filterShop(item._id)"
+        [ngClass]="{'active-a': item._id === routeId.shopId}">
+        {{item.name}}
+      </a>
+    </li>
+    <li>
+      <a [routerLink]="['/shops/search']" [queryParams]="{featured: 1}" class="view-all-menu"><span translate>View all</span></a>
+    </li>
+  </ul>
+
+  <div class="title-main">
+    <h2 translate>Filters</h2>
+  </div>
+  <ul class="category-left">
+    <li class="category-filter">
+      <input name="filter" type="checkbox" (change)="filter()" [checked]="filterAll" [(ngModel)]="filterAll">&nbsp;
+      <span translate>All</span>
+    </li>
+    <li class="category-filter">
+      <input name="discounted" [disabled]="filterAll" type="checkbox" (change)="filter()" [(ngModel)]="productService.searchFields.discounted">&nbsp;
+      <span translate>Discounted</span>
+    </li>
+    <li class="category-filter">
+      <input name="bestSell" [disabled]="filterAll" type="checkbox" (change)="filter()" [(ngModel)]="productService.searchFields.bestSell">&nbsp;
+      <span translate>Best Sale</span>
+    </li>
+    <li class="category-filter">
+      <input name="featured" [disabled]="filterAll" type="checkbox" (change)="filter()" [(ngModel)]="productService.searchFields.featured">&nbsp;
+      <span translate>Featured</span>
+    </li>
+    <li class="category-filter">
+      <input name="hot" [disabled]="filterAll" type="checkbox" (change)="filter()" [(ngModel)]="productService.searchFields.hot">&nbsp;
+      <span translate>Hottest</span>
+    </li>
+    <li class="category-filter">
+      <input name="dailyDeal" [disabled]="filterAll" type="checkbox" (change)="filter()" [(ngModel)]="productService.searchFields.dailyDeal">&nbsp;
+      <span translate>Daily Deal</span>
+    </li>
+    <li class="category-filter">
+      <input name="soldOut" [disabled]="filterAll" type="checkbox" (change)="filter()" [(ngModel)]="productService.searchFields.soldOut">&nbsp;
+      <span translate>Sold Out</span>
+    </li>
+  </ul>
+
+  <div class="title-main" *ngIf="transactionDetails && (transactionDetails.name == 'Rent' || transactionDetails.name == 'Share')">
+    <h2><span translate>Check Availability</span></h2>
+  </div>
+  <div class="category-left" *ngIf="transactionDetails && (transactionDetails.name == 'Rent' || transactionDetails.name == 'Share')">
+    <div class="content">
+      <div class="form-group">
+        <input name="startDate" class="form-control" placeholder="Start Date"
+        name="dp" [(ngModel)]="startDate" ngbDatepicker [markDisabled]="isDisabled" #df="ngbDatepicker" (click)="df.toggle()" (dateSelect)="onAvailableChange($event)">
+      </div>
+      <div class="form-group">
+        <input name="endDate" class="form-control" placeholder="End Date" name="dp" [(ngModel)]="endDate" ngbDatepicker [markDisabled]="isDisabled" [minDate]="minDate" [maxDate]="maxDate" [footerTemplate]="footerFromTemplate" [dayTemplate]="customStartDay" #dt="ngbDatepicker" (click)="dt.toggle()" (dateSelect)="onAvailableChange($event)">
+      </div>
+    </div>
+  </div>
+</div>

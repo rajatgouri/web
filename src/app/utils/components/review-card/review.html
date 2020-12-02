@@ -1,0 +1,36 @@
+<div class="form-review col-md-12 pt-3">
+  <form (submit)="submit(frm)" #frm="ngForm">
+    <div class="form-group">
+      <textarea class="form-control" [(ngModel)]="review.comment" name="comment" rows="3" placeholder="{{'Your message' | translate}}"
+        [disabled]="!isLoggedin || !canReview || checkReview" required #text="ngModel"></textarea>
+      <div *ngIf="text.errors && submitted">
+        <p [hidden]="!text.errors.required" class="error" translate>Please enter comment</p>
+      </div>
+      <p class="help help-block text-center" *ngIf="!isLoggedin">
+        <span translate>Please</span>&nbsp;<a [routerLink]="['/']" class="alert-link" translate>login</a>&nbsp;<span
+          translate>to review..</span>
+      </p>
+      <p class="help help-block text-center" *ngIf="isLoggedin && !canReview">
+        <span translate>Please purchase shop product before leaving a review</span>
+      </p>
+      <p class="help help-block text-center" *ngIf="checkReview">
+        <span *ngIf="options.type === 'product'" translate>You have reviewed this product, you can not review this
+          product anymore</span>
+        <span *ngIf="options.type === 'shop'" translate>You have reviewed this shop, you can not review this
+          shop anymore</span>
+      </p>
+    </div>
+    <div class="form-group inline">
+      <div class="pull-left" translate>Your rating</div>
+      <div class="pull-right">
+        <ngb-rating [(rate)]="review.rating" (hover)="hovered=$event" max="5" class="no-outline">
+          <ng-template let-fill="fill" let-index="index">
+            <span class="star font-22" [class.filled]="fill === 100" [class.bad]="index < 2">&#9733;</span>
+          </ng-template>
+        </ngb-rating>
+      </div>
+    </div>
+    <button class="btn btn-warning" type="submit" [hidden]="!isLoggedin || !canReview || checkReview" translate>Leave a
+      review</button>
+  </form>
+</div>

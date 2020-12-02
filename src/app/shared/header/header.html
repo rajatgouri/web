@@ -1,0 +1,196 @@
+<header id="header">
+  <!--header-->
+
+  <div class = "container">
+  <div class="row  upperheader">
+
+    <div class="col-3 text-left">
+      <!-- <img src="../../../assets/images/flags/ca.svg" height="30" width="30"> -->
+      <div ngbDropdown class="d-inline-block mr-1" *ngIf="isLoaded">
+        <button class="btn  dropdown-toggle flag-dropdown borderless" type="button" id="dropdownLanguage"
+          ngbDropdownToggle>
+          <img class="flag" [src]="flag" width="25px" />
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownLanguage" class="drop-menu-lang">
+          <button class="dropdown-item flags" type="button" *ngFor="let lang of languages"
+            (click)="changeLang(lang.key)">
+            <img class="flag" [src]="'/assets/images/flags/' + lang.key + '.svg'" width="25px" />
+            {{lang.name}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-9 text-right">
+      <div class="nav navbar-nav pull-right " *ngIf="!currentUser" >
+        <span class="mt-2 mr-2 auth-link">
+          <auth-signup></auth-signup>
+        </span>
+       
+        <span class="mt-2 auth-link">
+          <auth-login ></auth-login>
+        </span>
+        
+      </div>
+      <div class="dropdown pull-right user-dropdown" *ngIf="currentUser" ngbDropdown>
+        <a class="btn btn-secondary dropdown-toggle toggle-user" ngbDropdownToggle role="button" 
+          id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img [src]="currentUser?.avatarUrl" class="avatar-circle" /><span>{{currentUser.name}}</span>
+        </a>
+        <div class="dropdown-menu" >
+          <a class="dropdown-item" appLocationHref [url]="'/profile/update'"><i class="fa fa-user"></i>&nbsp;<span
+              translate>Update Profile</span></a>
+          <a class="dropdown-item" appLocationHref [url]="'/orders/list'"><i
+              class="fa fa-shopping-cart"></i>&nbsp;<span translate>Orders History</span></a>
+          <a class="dropdown-item" appLocationHref [url]="'/donations/list'"><i class="fa fa-money"></i>&nbsp;<span translate>My Donation</span></a>
+          <a class="dropdown-item" appLocationHref [url]="'/profile/wishlist'"><i class="fa fa-heart"></i>&nbsp;<span
+              translate>My Wishlist</span></a>
+          <a class="dropdown-item" appLocationHref [url]="'/profile/refunds'"><i
+              class="fa fa-dollar"></i>&nbsp;&nbsp;<span translate>Refund Requests</span></a>
+          <a class="dropdown-item" [routerLink]="" (click)="complain()"><i class="fa fa-flag"></i>&nbsp;<span
+              translate>Complain</span></a>
+          <a class="dropdown-item" appLocationHref [url]="'/messages/conversations'"><i class="fa fa-comments"></i>
+            <span translate>Messages</span></a>
+          <a class="dropdown-item" [routerLink]="" (click)="logout()"><i class="fa fa-lock"></i>&nbsp;<span
+              translate>Log out</span></a>
+        </div>
+
+        <div class="cart-top">
+          <a appLocationHref [url]="'/cart/checkout'">
+            <img src="/assets/images/cart.png" />
+            <span>{{cart ? cart.length : 0}}</span>
+          </a>
+        </div>
+      </div>
+      <!-- <span>
+        <div ngbDropdown class="d-inline-block mr-1" *ngIf="isLoaded">
+          <button class="btn btn-outline-secondary dropdown-toggle flag-dropdown borderless" type="button" id="dropdownLanguage"
+            ngbDropdownToggle>
+            <img class="flag" [src]="flag" width="25px" />
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownLanguage" class="drop-menu-lang">
+            <button class="dropdown-item flags" type="button" *ngFor="let lang of languages"
+              (click)="changeLang(lang.key)">
+              <img class="flag" [src]="'/assets/images/flags/' + lang.key + '.svg'" width="25px" />
+              {{lang.name}}
+            </button>
+          </div>
+        </div>
+      </span> -->
+    </div>
+  </div>
+</div>
+  <div class="header-middle">
+    <!--header-middle-->
+    <div class="container">
+      
+      <div class="logo pull-left">
+        <a [routerLink]="['/']">
+          <img [src]="appConfig?.siteLogo" *ngIf="appConfig?.siteLogo" />
+          <span *ngIf="!appConfig?.siteLogo">{{appConfig?.siteName}}</span>
+        </a>
+      </div>
+      <div class="search_box pull-left">
+        <!-- <input type="text" class="form-control"  placeholder="{{'What Are You Looking For ?' | translate}}" /> -->
+        <ng-autocomplete #searchautocomplete
+          [data]="searchData"
+          [searchKeyword]="keyword"
+          (selected)='selectEvent($event)'
+          (inputChanged)='onChangeSearch($event)'
+          (inputCleared)="onClearSearch($event)"
+          (keypress)='keypressEvent($event)'
+          (inputFocused)='onFocused($event)'
+          [itemTemplate]="itemTemplate"
+          [notFoundTemplate]="notFoundTemplate"
+          [minQueryLength]="2" 
+          placeHolder="Search Products"
+          [(ngModel)] = "search_"
+        >                                 
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+          <a [innerHTML]="item.name"></a>
+        </ng-template>
+        
+           
+        <ng-template #notFoundTemplate let-notFound>
+          <div [innerHTML]="notFound"></div>
+        </ng-template>
+
+      </div>
+      <div class="shop-menu pull-right" >
+       
+        <button class="btn  mr-2 trade-button btn-primary rounded" (click)="openSeller('Sell')">Sell <i class="fa fa-camera"></i></button>
+        <button class="btn  mr-2 trade-button btn-warning rounded" (click)="openSeller('Rent')">Rent/Share <i class="fa fa-camera"></i></button>
+        <button class="btn  mr-2 trade-button btn-success rounded" (click)="openSeller('Trade')">Trade <i class="fa fa-camera"></i></button>
+      </div>
+    </div>
+  </div>
+  <!--/header-middle-->
+</header>
+
+<div *ngIf="backdrop">
+  <div class="modal-backdrop show"></div>
+</div>
+
+
+<div class="fade modal text-left sell-trade-modal" #Modal >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal body -->
+      <div class="modal-body p-0">
+        <div class="card" >
+          <article class="card-body ">
+            <button type="button"  (click)="hideModal()" class="close text-white" data-dismiss="modal">&times;</button>
+
+            <div class="mt-5 mb-5">
+              <h3 class="text-white">Post your Items in as Little<br> as 30 seconds</h3>
+              <div class="mt-3">
+                <div class="form-check-inline">
+                  <label class="form-check-label text-white">
+                    <input type="radio" class="form-check-input" name="selection" value="phone" checked (click)="onChecked($event)">Phone
+                  </label>
+                </div>
+                <div class="form-check-inline ">
+                  <label class="form-check-label text-white">
+                    <input type="radio" class="form-check-input" name="selection" value="email" (click)="onChecked($event)">Email
+                  </label>
+                </div>
+              </div>
+  
+              <div class="mt-3">
+                <form #frm="ngForm" (submit)="onSubmitModal(frm)" >
+                  <div class="input-group mb-3">
+                    <input *ngIf="showEmail" type="email" class="form-control form-control-lg" placeholder="{{'Email' | translate}}" 
+                    autocomplete="off" name="email" #email="ngModel" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+                    [(ngModel)]="credentials.email"  required>
+                    
+  
+                    <!-- <input *ngIf="!showEmail" type="text" class="form-control" placeholder="{{'Enter your phone' | translate}}"
+                    name="phoneNumber" [minlength]="9" [maxlength]="10" pattern="\d*" #phone="ngModel"
+                    (keypress)="onlyNumberKey($event)" [(ngModel)]="credentials.phoneNumber"  required>
+                     -->
+
+                     <ngx-intl-tel-input *ngIf="!showEmail" class="dialphone w-85" [searchCountryFlag]="true"
+                       [selectFirstCountry]="false"
+                      [phoneValidation]="true" [enableAutoCountrySelect]="true"
+                      name="phone" required #phone="ngModel" [(ngModel)]="credentials.phone">
+                      </ngx-intl-tel-input>
+                  
+                    <div class="input-group-append">
+                      <button class="btn btn-success" type="submit">Send</button>
+                    </div>
+                  </div>
+                  
+                </form>
+              </div>
+            </div>
+           
+          </article>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

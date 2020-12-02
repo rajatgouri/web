@@ -1,0 +1,7 @@
+<div>
+  <app-header   (updateFields) = "onUpdateFields($event)"></app-header>
+  <search-bar  (updateFields) = "onUpdateFields($event)"></search-bar>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+  <ng2-toasty [position]="'top-right'"></ng2-toasty>
+</div>

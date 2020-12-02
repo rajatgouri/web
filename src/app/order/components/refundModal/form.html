@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <h4 class="modal-title" translate>Refund </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <textarea [(ngModel)]="reason" name="reason" placeholder="{{'Reason for refund' | translate}}" rows="3" class="form-control mar-bot-15" required></textarea>
+  <button class="btn btn-success" (click)="send()" translate>Send</button>&nbsp;
+  <button class="btn btn-warning" (click)="activeModal.close('Cancel')" translate>Cancel</button>
+</div>

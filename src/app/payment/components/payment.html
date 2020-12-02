@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row text-center">
+    <div class="col-md-12">
+      <div class="paymentCont">
+        <div class="headingWrap">
+          <h3 class="headingTop text-center" translate>Select Your Payment Method</h3>
+        </div>
+        <div class="paymentWrap">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="paymentMethod">
+                <div class="method" [ngClass]="{'active': paymentInfo.gateway === 'paypal'}">
+                  <a (click)="selectGateway('paypal')">
+                    <img src="/assets/images/paypal.png" width="100%">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="paymentMethod">
+                <div class="method" [ngClass]="{'active' : paymentInfo.gateway === 'stripe'}">
+                  <a (click)="selectGateway('stripe')">
+                    <img src="/assets/images/stripe.png" width="100%">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footerNavWrap clearfix">
+          <div class="btn btn-success pull-left btn-fyi"><a [routerLink]="['/']"><span class="glyphicon glyphicon-chevron-left"></span> <span translate>CONTINUE SHOPPING</span></a></div>
+          <div class="btn btn-success pull-right btn-fyi" (click)="submit()" translate>CHECKOUT<span class="glyphicon glyphicon-chevron-right"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

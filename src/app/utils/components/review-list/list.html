@@ -1,0 +1,24 @@
+<review-card [options]="options" (onRating)="onRating($event)" class="inline"></review-card>
+
+<ul class="list-review">
+  <li *ngFor="let item of reviews; let i = index">
+    <div class="media">
+      <div class="media-left">
+        <img class="media-object mr-2" [src]="item?.rater?.avatarUrl | checkImage" alt="img">
+      </div>
+      <div class="media-body">
+        <div class="title-comment">{{item?.rater?.name}} <span class="pull-right">{{item.createdAt | date:'short'}}</span></div>
+        <star-rating [rate]="item.rating"></star-rating>
+        <a class="pull-right" [hidden]="userId !== item.rateBy" (click)="update(item, i)"><i class="fa fa-pencil"></i></a>
+        <!-- <span class="pull-right"></span> -->
+        <p class="italic">{{item?.comment}}</p>
+      </div>
+    </div>
+  </li>
+</ul>
+<p *ngIf="!total" translate>There is no reviews.</p>
+<div class="display-inline" [hidden]="total < pageSize">
+  <div class="pull-right">
+    <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" [pageSize]="pageSize" (pageChange)="query()"></ngb-pagination>
+  </div>
+</div>

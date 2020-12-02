@@ -1,0 +1,178 @@
+
+<a (click)="showModal()"><i class="fa fa-lock mr-1"></i> <span translate>Login</span></a>
+
+<div *ngIf="backdrop">
+  <div class="modal-backdrop show"></div>
+</div>
+
+<div class="fade modal text-left" id="loginModal"  #loginModal >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{showLogin ? 'SignIn': 'Forget Password?'}}</h4>
+        <button type="button"  (click)="hideModal()" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body p-0">
+        <div class="card" *ngIf="showLogin">
+          <article class="card-body login-form">
+            <form class="form-horizontal form-material" (submit)="login(frm)" #frm="ngForm">
+              <!-- <div class="form-group ">
+                <div class="col-xs-12">
+                  <input class="form-control" placeholder="{{'Email' | translate}}" required type="text" autocomplete="off" name="email" #email="ngModel" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [(ngModel)]="credentials.email" />
+                  <div *ngIf="email.errors && (email.dirty || email.touched || submitted)">
+                    <p [hidden]="!email.errors.required" class="error" translate>
+                      Email is required
+                    </p>
+                    <p [hidden]="!email.errors.pattern" class="error" translate>
+                      Email is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group ">
+                <div class="col-xs-12">
+                  <input class="form-control" placeholder="{{'Password' | translate}}" required type="password" autocomplete="off" name="pw" [minlength]="6" #password="ngModel" [(ngModel)]="credentials.password" />
+                  <div *ngIf="password.errors && (password.dirty || password.touched || submitted)">
+                    <p [hidden]="!password.errors.minlength" class="error" translate>
+                      Password must be at least 6 characters!
+                    </p>
+                    <p [hidden]="!password.errors.required" class="error" translate>
+                      Password is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-12 font-14">
+                  <a  class="color-dark pull-left underline" (click)="showRegister()" translate>Register</a>
+                  <a class="color-dark pull-right underline" (click)="forgetPassword()" translate>
+                    forget password?
+                  </a>
+                </div>
+              </div>
+              <div class="form-group text-center m-t-20">
+                <button class="btn btn-default" type="submit" translate>Log In</button>
+              </div> -->
+              <div>
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" (click)="changeLoginType('email')">Email</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" (click)="changeLoginType('phone')">Phone</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- Email -->
+              <div class="form-group" *ngIf="loginType">
+                <div class="col-xs-12">
+                  <input class="form-control" placeholder="{{'Email' | translate}}" required type="text" autocomplete="off" name="email" #email="ngModel" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [(ngModel)]="credentials.email" />
+                  <div *ngIf="email.errors && (email.dirty || email.touched || submitted)">
+                    <p [hidden]="!email.errors.required" class="error" translate> Email is required </p>
+                    <p [hidden]="!email.errors.pattern" class="error" translate> Email is wrong format </p>
+                    <p [hidden]="!email.errors.exists" class="error" translate> Email is Already Exists </p>
+                  </div>
+                </div>
+              </div>
+              <!-- Phone -->
+              <div class="form-group" *ngIf="!loginType">
+                <ngx-intl-tel-input  class="dialphone w-100" [searchCountryFlag]="true" autocomplete="off"
+                [enableAutoCountrySelect]="false" [selectFirstCountry]="false" #ngxIntlTelInput
+                name="phone" required #phone="ngModel" [(ngModel)]="credentials.phoneNumber" >
+                </ngx-intl-tel-input>
+
+                <div *ngIf="phone.errors && (phone.touched || submitted)">
+                  <p [hidden]="!phone.errors.validatePhoneNumber" class="error" translate> Phone must be 9-10 characters </p>
+                  <p [hidden]="!phone.errors.required" class="error" translate> Phone is required </p>
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="usePassword && !otp">
+                <div class="col-xs-12">
+                  <input class="form-control" placeholder="{{'Password' | translate}}" required type="password" autocomplete="off" name="password" [minlength]="6" #password="ngModel" [(ngModel)]="credentials.password" />
+                  
+                  <div *ngIf="password.errors && (password.dirty || password.touched || submitted)">
+                    <p [hidden]="!password.errors.minlength" class="error" translate>
+                      Password must be at least 6 characters!
+                    </p>
+                    <p [hidden]="!password.errors.required" class="error" translate>
+                      Password is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="!usePassword && !otp">
+                <div class="col-xs-12">
+                  <div class="input-group ">
+                      <input class="form-control w-75" placeholder="{{'OTP' | translate}}" required type="text" autocomplete="off" name="password" [minlength]="6" [maxlength]="6" #password="ngModel" (keypress)="onlyNumberKey($event)" [(ngModel)]="credentials.password" />
+                      <button class="btn bg-success text-white btn-sm" type="button" (click)="resendOTP()">Resend</button>
+                  </div>
+                  <div *ngIf="password.errors && (password.dirty || password.touched || submitted)">
+                    <p [hidden]="!password.errors.minlength" class="error" translate>
+                      Password must be at least 6 characters!
+                    </p>
+                    <p [hidden]="!password.errors.required" class="error" translate>
+                      OTP is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="font-14">
+                <a  class="pull-left color-dark underline"></a>
+
+                <a  class="pull-right color-dark underline" *ngIf="showUseOtp && !otp"  (click)="useLoginPassword(false)" translate>use OTP?</a>
+                <a  class="pull-right color-dark underline" *ngIf="!showUseOtp && !otp"  (click)="useLoginPassword(true)" translate>use password?</a>
+                <a  class="pull-right color-dark  underline" *ngIf="otp"  (click)="useLoginPassword(true)" translate>use Password?</a>
+                
+              </div>
+              
+              
+              <div class="form-group text-center mt-5" *ngIf="!otp">
+                <button class="btn bg-danger text-white rounded" type="submit" translate>Log In</button><br>
+                <!-- <a  class="color-dark underline" *ngIf="showUseOtp"  (click)="useLoginPassword(false)" translate>use OTP?</a>
+                <a  class="color-dark underline" *ngIf="!showUseOtp"  (click)="useLoginPassword(true)" translate>use password?</a> -->
+              </div>
+
+              <div class="form-group text-center mt-5" *ngIf="otp">
+                <button class="btn bg-danger text-white rounded" type="submit" translate>Login with OTP</button><br>
+    
+              </div>
+
+              <div class=" font-14">
+                <a  class="color-dark pull-left underline" (click)="showRegister()" translate>Register</a>
+                <a class="color-dark pull-right underline" (click)="forgetPassword()" translate>
+                  <span ></span>forget password?
+                </a>
+              </div>
+              
+            
+            </form>
+
+            
+            <!-- <div class="socials-box">
+              <div class="social-login facebook">
+                <facebook-login></facebook-login>
+              </div>
+              <div class="social-login google">
+                <google-login></google-login>
+              </div>
+            </div> -->
+          </article>
+        </div>
+
+        <div *ngIf="!showLogin">
+          <auth-forget-password (hide)="hideModal()" (showLogin)="onShowLogin()" (showRegister)="showRegister()"></auth-forget-password>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

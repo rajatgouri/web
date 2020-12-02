@@ -1,0 +1,94 @@
+<!-- <div class="row row-detail-main justify-content-center pad-bt-45">
+  <div class="col-md-4">
+    
+  </div>
+</div> -->
+
+<!-- 
+<a  (click)="showModal()"><span translate>Forget Password?</span></a>
+
+<div *ngIf="backdrop">
+  <div class="modal-backdrop show"></div>
+</div> -->
+
+<div class="card">
+  <article class="card-body login-form">
+    <form class="form-horizontal form-material" (submit)="forgot(frm)" #frm="ngForm">
+      <div class="form-group ">
+        <div class="col-xs-12">
+          <input class="form-control" placeholder="{{'Your email' | translate}}" required type="text" name="email" [(ngModel)]="email" pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #em="ngModel" />
+        </div>
+        <div *ngIf="em.errors && (em.dirty || em.touched || submitted)">
+          <p [hidden]="!em.errors.required" class="error" translate>
+            Email is required
+          </p>
+          <p [hidden]="!em.errors.pattern" class="error" translate>
+            Email is invalid format
+          </p>
+        </div>
+      </div>
+      <div class="form-group text-center m-t-20">
+        <div class="col-xs-12">
+          <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit" translate>Confirm</button>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12 font-14">
+          <span class="text-dark pull-right">
+            <a (click)="login()" translate class="underline">Login </a>
+            <span translate>Or</span>
+            <a (click)="register()" translate class="underline"> Register</a>
+          </span>
+        </div>
+      </div> 
+    </form>
+  </article>
+</div>
+<!-- <div class="fade modal text-left" #forgetModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Forget Passord ?</h4>
+        <button type="button" (click)="hideModal()" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body p-0">
+        <div class="card">
+      <article class="card-body login-form">
+        <form class="form-horizontal form-material" (submit)="forgot(frm)" #frm="ngForm">
+          <div class="form-group ">
+            <div class="col-xs-12">
+              <input class="form-control" placeholder="{{'Your email' | translate}}" required type="text" name="email" [(ngModel)]="email" pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #em="ngModel" />
+            </div>
+            <div *ngIf="em.errors && (em.dirty || em.touched || submitted)">
+              <p [hidden]="!em.errors.required" class="error" translate>
+                Email is required
+              </p>
+              <p [hidden]="!em.errors.pattern" class="error" translate>
+                Email is invalid format
+              </p>
+            </div>
+          </div>
+          <div class="form-group text-center m-t-20">
+            <div class="col-xs-12">
+              <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit" translate>Confirm</button>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-12 font-14">
+              <span class="text-dark pull-right">
+                <a routerLink="/auth/login" translate class="underline">Login </a>
+                <span translate>Or</span>
+                <a routerLink="/auth/register" translate class="underline"> Register</a>
+              </span>
+            </div>
+          </div> 
+        </form>
+      </article>
+    </div>
+      </div>
+
+    </div>
+  </div>
+</div> -->

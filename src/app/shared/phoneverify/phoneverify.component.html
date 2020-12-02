@@ -1,0 +1,41 @@
+<input type="button" class="btn btn-primary" name="Verify" value="Verify" *ngIf="!isVerified" (click)="verifyPhone()">
+<span *ngIf="isVerified">Verified</span>
+
+
+<ng-template #phoneverificationmodal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" translate>Verify your phone number</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form role="form" #frm="ngForm" (submit)="verifyCode(frm)" ngNativeValidate method="post">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Enter the token sent to your mobile" [(ngModel)]="verificationCode"
+              name="verificationCode" required  #code="ngModel" />
+              <div *ngIf="code.errors && (code.dirty || code.touched || isSubmitted)">
+                <p [hidden]="!code.errors.pattern" class="error" translate> Token must be number </p>
+                <p [hidden]="!code.errors.required" class="error" translate> Token number is required </p>
+              </div>
+            </div>
+            <div class="form-group">
+              <p class="help help-block" translate>A verify code has been sent to your phone number. Please enter it exactly to the box.</p>
+
+            </div>
+            <div class="form-group">
+              <button class="btn btn-success" type="submit" translate>Verify</button>&nbsp;
+              <button class="btn btn-warning" (click)="modal.dismiss('Cancel')" translate>Cancel</button>
+            </div>
+            <div class="form-group">
+              <p class="verify-text" translate>Don't get any verify COD number, <a (click)="reSendVerifyNumber()">click here</a> </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

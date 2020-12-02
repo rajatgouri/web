@@ -1,0 +1,39 @@
+<div class="box-product">
+  
+  <span class="cus-tag cus-tag-orange" *ngIf="!product.transactiontype || product.transactiontype.name == ''">Buy</span>
+  <span class="cus-tag cus-tag-orange" *ngIf="product.transactiontype && product.transactiontype.name == 'Buy' ">{{product?.transactiontype.name}}</span>
+  <span class="cus-tag cus-tag-red" *ngIf="product.transactiontype && product.transactiontype.name == 'Sell'">Buy</span>
+  <span class="cus-tag cus-tag-yellow" *ngIf="product.transactiontype && product.transactiontype.name == 'Rent'">{{product?.transactiontype.name}}</span>
+  <span class="cus-tag cus-tag-green" *ngIf="product.transactiontype && product.transactiontype.name == 'Share'">{{product?.transactiontype.name}}</span>
+  <span class="cus-tag cus-tag-blue" *ngIf="product.transactiontype && product.transactiontype.name == 'Trade'">{{product?.transactiontype.name}}</span>
+  <div class="img-prod">
+    <a appLocationHref [url]="'/products/' + product.alias">
+      <img class="h-100 w-100" [src]="product?.mainImage?.thumbUrl | checkImage">
+    </a>
+  </div>
+  <div class="text-product">
+    <div class="name-product"><a appLocationHref [url]="'/products/' + product.alias"
+        title="{{product?.name}}">{{product?.name}}</a></div>
+    <div class="price-product" *ngIf="salePrice">
+      <span>
+        <price-convert [price]="salePrice"></price-convert>
+      </span> 
+      <span class="line-through ml-1 ">
+        <price-convert [price]="price"></price-convert>
+      </span>
+    </div>
+    <div class="price-product" *ngIf="!salePrice">
+      <span>
+        <price-convert [price]="price"></price-convert>
+      </span>
+    </div>
+    <div class="small mt5 font-weight-bolder"> {{product?.location.country ? (product?.location.country + ', ' + product?.location.countryCode): 'Niagara falls, ON' }}</div>
+    <div class="clear"></div>
+    <!-- <star-rating [rate]="product.ratingAvg" [total]="product.totalRating"></star-rating> -->
+    <div class="deal-time" *ngIf="product.dailyDeal && product.dealTo && showDeal"><span>Deal to</span>
+      {{product.dealTo | date: 'medium'}}</div>
+
+    <!-- <div class="deal-time custom" *ngIf="!isOwner"><span translate>Sold by</span> <a
+        [routerLink]="['/shops', product?.shop?.alias]"> {{product?.shop?.name}}</a></div> -->
+  </div>
+</div>

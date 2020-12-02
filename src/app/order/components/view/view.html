@@ -1,0 +1,260 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading resume-heading">
+            <div class="row">
+              <div class="col-lg-12">
+                <h3 translate>General information</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        ID order
+                      </div>
+                      <div class="col-md-10">
+                        <strong>{{order.trackingCode}}</strong>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        IP
+                      </div>
+                      <div class="col-md-10">
+                        {{order.userIP}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Created at
+                      </div>
+                      <div class="col-md-10">
+                        {{order.createdAt | date:'short'}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Shipping address
+                      </div>
+                      <div class="col-md-10">
+                        {{order.shippingAddress}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Payment method
+                      </div>
+                      <div class="col-md-10">
+                        <span class="badge badge-success">
+                          {{order.paymentMethod}}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Payment status
+                      </div>
+                      <div class="col-md-10">
+                        <span class="badge badge-success">
+                          {{order.paymentStatus}}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Total price
+                      </div>
+                      <div class="col-md-10 price-product">
+                        <price-currency [price]="order.userTotalPrice" [currency]="order.userCurrency"></price-currency>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <br>
+                <h3 translate>Shipping details</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Name
+                      </div>
+                      <div class="col-md-10">
+                        {{order.firstName}} {{order.lastName}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Email
+                      </div>
+                      <div class="col-md-4">
+                        {{order.email || order?.customer?.email}}
+                      </div>
+                      <div class="col-md-2" translate>
+                        Phone number
+                      </div>
+                      <div class="col-md-4">
+                        {{order.phoneNumber}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        Street address
+                      </div>
+                      <div class="col-md-4">
+                        {{order.streetAddress}}
+                      </div>
+                      <div class="col-md-2" translate>
+                        City
+                      </div>
+                      <div class="col-md-4">
+                        {{order.city}}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-md-2" translate>
+                        State
+                      </div>
+                      <div class="col-md-4">
+                        {{order.state}}
+                      </div>
+                      <div class="col-md-2" translate>
+                        Country
+                      </div>
+                      <div class="col-md-4">
+                        {{order.country}}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <br>
+                <h3 translate>Products</h3>
+                <div class="table-responsive">
+                  <table class="table border-1 table-condensed">
+                    <thead>
+                      <tr>
+                        <th translate>
+                          ID sub order
+                        </th>
+                        <th translate>
+                          Product
+                        </th>
+                        <th translate>
+                          Variant
+                        </th>
+                        <th translate>
+                          Quantity
+                        </th>
+                        <th translate>
+                          Status
+                        </th>
+                        <th>
+                          <span translate>Shipping Method</span>
+                        </th>
+                        <th>
+                          <span translate>Shipping Code</span>
+                        </th>
+                        <th>
+                          <span translate>Tax</span> / <span translate>Shipping price</span>
+                        </th>
+                        <th>
+                          <span translate>Deposit Price</span>
+                        </th>
+                        <th>
+                          <span translate>Price</span>
+                        </th>
+                        <th>
+                          <span translate>Action</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of details, let i = index">
+                        <td>
+                          {{item?.trackingCode}}
+                        </td>
+                        <td>
+                          <p>
+                            <a appLocationHref [url]="'/products/' + item.productDetails.alias">{{item?.productDetails?.name}}</a>
+                            <br />
+                            <span *ngIf="item?.startDate && item?.endDate">{{item?.startDate | date:'M/d/yyyy'}} - {{item?.endDate | date:'M/d/yyyy'}}</span>
+                            <br />
+                            <span class="badge badge-primary">{{item.productDetails?.type}}</span>
+                          </p>
+                        </td>
+                        <td>
+                          <p *ngIf="item.variantDetails">
+                            <span *ngFor="let option of item.variantDetails.options">
+                              {{option.displayText || option.optionKey}}: {{option.value}}
+                            </span>
+                          </p>
+                        </td>
+                        <td>{{item?.quantity}}</td>
+                        <td>
+                          <status-display [status]="item.status"></status-display>
+                        </td>
+                        <td>
+                          <span class="text-muted" [hidden]="item.shippingMethod">N/A</span>
+                          <span class="badge badge-success">{{item?.shippingMethod}}</span>
+                        </td>
+                        <td>
+                          <span class="text-muted" [hidden]="item.shippingCode">N/A</span>
+                          <span class="badge badge-warning">{{item?.shippingCode}}</span>
+                        </td>
+                        <td>
+                          <p>
+                            <span>
+                              <span translate>Tax :</span>
+                              <price-currency [price]="item.taxPrice" [currency]="order.userCurrency"></price-currency>
+                            </span>
+                            <br />
+                            <span>
+                              <span translate>Shipping :</span>
+                              <price-currency [price]="item.shippingPrice" [currency]="order.userCurrency"></price-currency>
+                            </span>
+                          </p>
+                        </td>
+                        <td>
+                          <price-currency *ngIf="item.depositAmount>0" [price]="item.depositAmount" [currency]="item.userCurrency"></price-currency>
+                        </td>
+                        <td>
+                          <price-currency [price]="item.userTotalPrice" [currency]="item.userCurrency"></price-currency>
+                        </td>
+                        <td>
+                          <button class="btn btn-warning" (click)="openRefund(item)" translate style="margin-bottom: 10px">Request
+                            Refund</button><br>
+                          <button class="btn btn-danger" (click)="exportPDF(item)" translate>Export Data</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <br>
+                <a class="btn btn-warning" appLocationHref [url]="'/orders/list'" translate>Cancel</a>&nbsp;
+                <buy-us-a-coffee ></buy-us-a-coffee>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

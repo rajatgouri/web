@@ -1,0 +1,88 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <profile-sliderbar></profile-sliderbar>
+      </div>
+      <div class="col-md-9">
+        <div class="header-title">
+          <h4 translate>Donations</h4>
+        </div>
+          
+          <div class="table-responsive"  *ngIf="!isLoading">
+            <table class="table border-1 table-condensed" >
+              <thead>
+                <tr>
+                  <th>
+                    <a (click)="sortBy('name', 'desc')" translate>Name</a>
+                          <a (click)="sortBy('name', 'asc')" *ngIf="sortOption.sortType=='desc'">
+                            <i class="fa fa-caret-down"></i>
+                          </a>
+                          <a (click)="sortBy('name', 'desc')" *ngIf="sortOption.sortType=='asc'">
+                            <i class="fa fa-caret-up"></i>
+                          </a>
+                  </th>
+                  <th>
+                    <a (click)="sortBy('transactionId', 'desc')" translate>Transcation Id</a>
+                          <a (click)="sortBy('transactionId', 'asc')" *ngIf="sortOption.sortType=='desc'">
+                            <i class="fa fa-caret-down"></i>
+                          </a>
+                          <a (click)="sortBy('transactionId', 'desc')" *ngIf="sortOption.sortType=='asc'">
+                            <i class="fa fa-caret-up"></i>
+                          </a>
+                  </th>
+                  <th>
+                    <a (click)="sortBy('amount', 'desc')" translate>Amount</a>
+                      <a (click)="sortBy('amount', 'asc')" *ngIf="sortOption.sortType=='desc'">
+                        <i class="fa fa-caret-down"></i>
+                      </a>
+                      <a (click)="sortBy('amount', 'desc')" *ngIf="sortOption.sortType=='asc'">
+                        <i class="fa fa-caret-up"></i>
+                      </a>
+                  </th>
+                  <th>
+                    <a (click)="sortBy('createdAt', 'desc')" translate>created At</a>
+                        <a (click)="sortBy('createdAt', 'asc')" *ngIf="sortOption.sortType=='desc'">
+                          <i class="fa fa-caret-down"></i>
+                        </a>
+                        <a (click)="sortBy('createdAt', 'desc')" *ngIf="sortOption.sortType=='asc'">
+                          <i class="fa fa-caret-up"></i>
+                        </a>
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngIf="donations.length === 0">
+                <tr>
+                  <td class="text-center" colspan="4">No Donations Found</td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="donations.length > 0">
+
+                <tr *ngFor="let data of donations">
+                  <td>
+                    {{data.name}}
+                  </td>
+                  <td>
+                    {{data.transactionId}}
+                  </td>
+                  <td>
+                    $ {{data.amount}}
+                  </td>
+                  <td>
+                    {{data.createdAt | date:'short'}}
+                  </td>
+
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="1" (pageChange)="query()"></ngb-pagination>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+      </div>
+    </div>
+</div>

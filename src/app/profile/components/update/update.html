@@ -1,0 +1,181 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <profile-sliderbar></profile-sliderbar>
+      </div>
+      <div class="col-sm-9">
+        <div class="panel panel-default">
+          <form role="form" #frm="ngForm" (submit)="submit(frm)" ngNativeValidate method="post">
+            <div class="panel-heading resume-heading">
+              <div class="row">
+                <div class="col-sm-5">
+                  <figure>
+                    <img class="img-circle img-responsive" class="avatar" width="100%" [src]="avatarUrl">
+                  </figure>
+                  <file-upload [options]="avatarOptions"></file-upload>
+                </div>
+                <div class="col-sm-7">
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <i class="fa fa-user"></i>&nbsp; <span translate class="required">Name</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" placeholder="{{'Enter your name' | translate}}" [(ngModel)]="info.name" required name="name" #name="ngModel" />
+                          <div *ngIf="name.errors && (name.dirty || name.touched || isSubmitted)">
+                            <p [hidden]="!name.errors.required" style="color:red" translate> Please enter user first name and last name! </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-envelope"></i>&nbsp; <span translate class="required">Email</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="email" class="form-control" placeholder="user@example.com" [(ngModel)]="info.email" name="email" required #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" disabled />
+                          <div *ngIf="email.errors && (email.dirty || email.touched || isSubmitted)">
+                            <p [hidden]="!email.errors.required" style="color:red" translate> Email is required </p>
+                            <p [hidden]="!email.errors.pattern" style="color:red" translate> Please enter a valid email address </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-phone"></i>&nbsp; <span translate>Phone</span>
+                        </div>
+                        <div class="col-sm-6">
+                          <ngx-intl-tel-input class="dialphone" #ngxIntlTelInput  [searchCountryFlag]="true"
+                            name="phone" #phone="ngModel" [(ngModel)]="info.phoneNumber" (ngModelChange)="changePhoneNumber($event)">
+                          </ngx-intl-tel-input>
+                        </div>
+                        <div class="col-sm-3">
+                          <!-- <input type="button" class="btn btn-primary" name="Verify" value="Verify" *ngIf="!isVerified" (click)="verifyPhone()">
+                          <span *ngIf="isVerified">Verified</span> -->
+                          <app-phoneverify  [dialCode]="" [phoneNumber]="info.phoneNumber" [isVerified]="isVerified"
+                          [isInValid]="phone.errors && (phone.dirty || phone.touched)"
+                          (approve)="onVerifyApprove($event)"></app-phoneverify>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-location-arrow"></i>&nbsp; <span translate>Address</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" [(ngModel)]="info.address" name="address" />
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <i class="fa fa-unlock-alt"></i>&nbsp; <span translate class="required">Password</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="password" class="form-control" [(ngModel)]="info.password" name="password" #password="ngModel" minlength="6" />
+                          <div *ngIf="password.errors && (password.dirty || password.touched || isSubmitted)">
+                            <p [hidden]="!password.errors.minlength" style="color:red" translate> Password must be at least 6 characters! </p>
+                          </div>
+                          <p class="help help-block">
+                            <small translate>Blank to keep current password</small>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-transgender"></i>&nbsp; <span translate>Gender</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="radio" value="male" name="gender" [(ngModel)]="info.gender"> Male
+                          <input type="radio" value="female" name="gender" [(ngModel)]="info.gender"> Female
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>Street Address</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" [(ngModel)]="info.streetAddress" name="streetAddress" />
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>City</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" [(ngModel)]="info.city" name="city" #city="ngModel" pattern="[A-Za-z\s]+" />
+                          <div *ngIf="city.errors && (city.dirty || city.touched || isSubmitted)">
+                            <p [hidden]="!city.errors.pattern" class="error" translate> 'City' field must contain only alphabets </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>State</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" [(ngModel)]="info.state" name="state" #state="ngModel" pattern="[A-Za-z\s]+" />
+                          <div *ngIf="state.errors && (state.dirty || state.touched || isSubmitted)">
+                            <p [hidden]="!state.errors.pattern" class="error" translate> 'State' field must contain only alphabets </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>Country</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" [(ngModel)]="info.country" name="country" />
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                          <div class="row">
+                            <div class="col-md-3"><span translate>Zip Code</span>
+                            </div>
+                            <div class="col-sm-9">
+                              <input class="form-control" [(ngModel)]="info.zipCode" name="zipCode" />
+                            </div>
+                          </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>Shipping Address</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" [(ngModel)]="info.shippingAddress" name="shippingAddress" />
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit" translate>Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

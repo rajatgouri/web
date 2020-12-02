@@ -1,0 +1,79 @@
+<footer id="footer">
+  <div class="footer-widget">
+    <div class="container">
+      <div class="row mobile">
+        <div class="col-sm-2">
+          <div class="single-widget">
+            <h2 translate>Service</h2>
+            <ul>
+              <li>
+                <a class="a-link-color" appLocationHref [href]="'/contact/us'" translate>Contact Us</a>
+              </li>
+              <li>
+                <a class="a-link-color" appLocationHref [href]="'/page/faqs'" translate>FAQ’s</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="single-widget">
+            <h2 translate>Quick Links</h2>
+            <ul>
+              <li>
+                <a class="a-link-color" [href]="sellerLink" target="_blank" translate>Become a seller</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="single-widget">
+            <h2 translate>Policies</h2>
+            <ul>
+              <li>
+                <a class="a-link-color" appLocationHref [href]="'/page/terms'" translate>Terms of Use</a>
+              </li>
+              <li>
+                <a class="a-link-color" appLocationHref [href]="'/page/privacy-policy'" translate>Privacy Policy</a>
+              </li>
+              <li>
+                <a class="a-link-color" appLocationHref [href]="'/page/refund-policy'" translate>Refund Policy</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="single-widget">
+            <h2 translate>About Us</h2>
+            <ul>
+              <li>
+                <a class="a-link-color" appLocationHref [href]="'/page/about'" translate>About</a>
+              </li>
+              <!-- <li>
+                <span *ngFor="let lang of languages" class="lang" [ngClass]="{active: userLang === lang.key}" (click)="changeLang(lang.key)">
+                  <img [src]="'/assets/images/flags/' + lang.key + '.svg'" [alt]="lang.name" />
+                </span>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-3 col-sm-offset-1">
+          <div class="single-widget">
+            <h2 translate>Newsletter</h2>
+            <newsletter></newsletter>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="row">
+        <p class="pull-left">
+          <span *ngIf="appConfig?.showBuild">V{{ appConfig?.version }} build {{ appConfig?.build }} - </span>
+          <span>© Copyright 2018 {{ settings?.siteName }}. All rights reserved.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

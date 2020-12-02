@@ -1,0 +1,52 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="header-title">
+      <h4 translate>Shops</h4>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="filter-search mar-bot-10">
+          <div class="pull-left form-inline">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="shopSearch" placeholder="{{'Search shop' | translate}}" (keypress)="keyPress($event)" [(ngModel)]="searchFields.q" />
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary search-button-1" type="button" (click)="query()">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="pull-right form-nearby">
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" name="distance" placeholder="{{'Find shops nearby in kilometers' | translate}}" min="0.1" [(ngModel)]="map.distance" />
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary search-button-1" type="button" (click)="trackLocation()">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="filter-search">
+          <div class="pull-right form-inline">
+            <select class="select-1" [(ngModel)]="searchFields.featured" (change)="query()">
+              <option value="" translate>All</option>
+              <option value="1" translate>Featured</option>
+              <option value="0" translate>Non-featured</option>
+            </select>
+          </div>
+        </div>
+        <div *ngIf="!total" class="badge badge-warning" translate>No shops found</div>
+        <ul class="list-shop row" *ngIf="!isLoading">
+          <li class="col-sm-6 col-md-3" *ngFor="let item of shops">
+            <shop-card [shop]="item"></shop-card>
+            &nbsp;
+          </li>
+        </ul>
+        <div class="pull-right" *ngIf="total > itemsPerPage">
+          <ngb-pagination [pageSize]="itemsPerPage" [collectionSize]="total" [(page)]="page" [maxSize]="5" (pageChange)="query()"></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

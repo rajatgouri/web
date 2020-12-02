@@ -1,0 +1,60 @@
+<app-banner (updateFields)="updateFields($event)"></app-banner>
+
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <!-- <div class="col-md-3">
+        <search-sidebar (updateFields)="updateFields($event)"></search-sidebar>
+      </div> -->
+      <div class="col-md-12" *ngIf="!isLoading">
+        
+        <div class="search-results"
+          infinite-scroll
+          [infiniteScrollDistance]="scrollDistance"
+          [infiniteScrollThrottle]="throttle"
+          (scrolled)="onScrollDown()">
+
+        <div class="filter-search row">
+          
+          <div class="pull-right form-inline col-md-9">
+            <button type="button" class="btn btn-info float-right pl-n1" style="margin-left: 20px;height: 35px;" (click)="openFilter()" *ngIf="isMobile">
+              <i class="fa fa-filter" aria-hidden="true"></i>
+            </button>
+            
+            <select class="select-1" (change)="changeDistance($event)" name="createdAt">
+              <option value="Infinity" translate>All</option>
+              <option value="10" translate>10 Km</option>
+              <option value="20" translate>20 Km</option>
+              <option value="50" translate>50 Km</option>
+              <option value="100" translate>100 Km</option>
+            </select>
+
+            <select class="select-1" (change)="changeSort('createdAt', $event)" name="createdAt">
+              <option value="" translate>Latest</option>
+              <option value="asc" translate>Oldest to Newest</option>
+              <option value="desc" translate>Newest to Oldest</option>
+            </select>
+            <select class="select-1" (change)="changeSort('salePrice', $event)" name="price">
+              <option value="" translate>Price</option>
+              <option value="asc" translate>Lowest to Highest</option>
+              <option value="desc" translate>Highest to Lowest</option>
+            </select>
+            
+          </div>
+          <div class="pull-left pt20 col-md-3">
+            <strong>{{total}}</strong>&nbsp;<span translate>Results</span>
+          </div>
+        </div>
+        <ul class="list-product row">
+          <div class="badge badge-warning" translate *ngIf="!total">No products found</div>
+          <li class="products-container p-2" *ngFor="let item of items">
+            <product-card [product]="item"></product-card>
+          </li>
+        </ul>
+        <!-- <div class="pull-right" *ngIf="total > itemsPerPage">
+          <ngb-pagination [pageSize]="itemsPerPage" [collectionSize]="total" [(page)]="page" [maxSize]="5" (pageChange)="query()"></ngb-pagination>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" translate>Send Report to Admin</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2" translate>
+        Type
+      </div>
+      <div class="col-md-10">
+        <div class="form-inline">
+          <select class="select-1" [(ngModel)]="type" name="type">
+            <option value="contents" selected translate>Contents</option>
+            <option value="others" translate>Others</option>
+          </select>
+        </div>
+      </div>
+      <hr>
+      <div class="col-md-2" translate>
+        Report
+      </div>
+      <div class="col-md-10">
+        <textarea rows="3" cols="30" [(ngModel)]="content" placeholder="{{'Leave some text here' | translate}}"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="submit()" translate>Send</button>
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')" translate>Close</button>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="menu-main">
+  <div class="container">
+    <ul class="menu-list-nav">
+      <li *ngFor="let item of tree">
+        <a class="nav-parent" (click)="search(item)">{{item.name}}</a>
+        <ul class="sub-menu-nav">
+          <li *ngFor="let child of item.children">
+            <a class="nav-child" (click)="search(child)">{{child.name}}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

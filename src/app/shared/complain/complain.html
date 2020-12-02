@@ -1,0 +1,19 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" translate>Send Complain to Admin</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-3" translate>
+        Complain
+      </div>
+      <div class="col-md-9">
+        <textarea rows="3" cols="30" [(ngModel)]="content" placeholder="{{'Leave some text here' | translate}}"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="submit()" translate>Send</button>
+    <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')" translate>Close</button>
+  </div>
+</div>

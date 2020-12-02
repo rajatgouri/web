@@ -1,0 +1,13 @@
+<div class="input-group-prepend">
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn btn-default dropdown-toggle flag-dropdown" type="button" id="dropdownDialCode" ngbDropdownToggle>
+      <img class="flag" [src]="flag" width="25px" /> {{dialCode}}
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownDialCode" class="flags-dropdown">
+      <button class="dropdown-item flags" type="button" *ngFor="let dial of dialCodes" (click)="selectDial(dial)">
+        <img class="flag" [src]="'/assets/images/flags/' + dial.code.toLowerCase() + '.svg'" width="25px" />
+        <span> {{dial.dialCode}}</span>
+      </button>
+    </div>
+  </div>
+</div>

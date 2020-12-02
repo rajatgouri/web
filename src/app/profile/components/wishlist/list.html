@@ -1,0 +1,26 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <profile-sliderbar></profile-sliderbar>
+      </div>
+      <div class="col-md-9">
+        <ul class="list-product row">
+          <li class="col-sm-6 col-md-4 mar-bot-15" *ngFor="let item of items;let i = index">
+            <product-card [product]="item.product"></product-card>
+            <div class="block-btns">
+              <button class="btn btn-danger pull-right" (click)="remove(item._id, i)"><i class="fa fa-trash"></i>&nbsp;
+                <span translate>Remove</span>
+              </button>
+            </div>
+          </li>
+        </ul>
+        <div class="pull-right" *ngIf="total > itemsPerPage">
+          <ngb-pagination [collectionSize]="total" [(page)]="page" [maxSize]="5" (pageChange)="query()"></ngb-pagination>
+        </div>
+        <h3 class="badge badge-warning" *ngIf="!total && !isLoading" translate>Look like you are looking for
+          some new items.</h3>
+      </div>
+    </div>
+  </div>
+</div>

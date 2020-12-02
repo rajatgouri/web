@@ -1,0 +1,136 @@
+<a (click)="showModal()"><i class="fa fa-user mr-1"></i> <span translate>Sign up</span></a>
+
+<div *ngIf="backdrop">
+  <div class="modal-backdrop show"></div>
+</div>
+
+<!-- signup modal -->
+<div class="fade modal text-left" #signupModal>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Signup</h4>
+        <button type="button" (click)="hideModal()" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body p-0">
+        <div class="card">
+          <article class="card-body signup-form">
+            <form #frm="ngForm" (submit)="submit(frm)">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <label translate class="required">First name</label>
+                    <input type="text" class="form-control" placeholder="{{'Enter your first name' | translate}}"
+                      #firstName="ngModel" name="firstName" required [(ngModel)]="name.firstName" />
+                    <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched || submitted)">
+                      <p [hidden]="!firstName.errors.required" class="error" translate> First name is required </p>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label translate class="required">Last name</label>
+                    <input type="text" class="form-control" placeholder="{{'Enter your last name' | translate}}"
+                      #lastName="ngModel" name="lastName" required [(ngModel)]="name.lastName" />
+                    <div *ngIf="lastName.errors && (lastName.dirty || lastName.touched || submitted)">
+                      <p [hidden]="!lastName.errors.required" class="error" translate> Last name is required </p>
+                    </div>
+                  </div>
+                </div>
+                <small class="form-text text-muted" translate>We'll never share your name with anyone else.</small>
+              </div>
+              <div class="form-group">
+                <label translate class="required">Email address</label>
+                <input type="text" class="form-control" placeholder="{{'Enter your email' | translate}}"
+                  #email="ngModel" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" required
+                  [(ngModel)]="account.email" />
+                <small class="form-text text-muted" translate>We'll never share your email with anyone else.</small>
+                <div *ngIf="email.errors && (email.dirty || email.touched || submitted)">
+                  <p [hidden]="!email.errors.required" class="error" translate> Email is required </p>
+                  <p [hidden]="!email.errors.pattern" class="error" translate> Email is wrong format </p>
+                  <p [hidden]="!email.errors.exists" class="error" translate> Email is Already Exists </p>
+
+                </div>
+              </div>
+              <div class="form-group">
+                <label translate class="required">Phone number</label>
+                <div class="input-group mb-3">
+                  <ngx-intl-tel-input  class="dialphone w-85" [searchCountryFlag]="true"
+                  [enableAutoCountrySelect]="false" [selectFirstCountry]="false" #ngxIntlTelInput
+                  name="phone" required #phone="ngModel" [(ngModel)]="account.phoneNumber" (ngModelChange)="changePhoneNumber($event)">
+                  </ngx-intl-tel-input>
+
+                  <app-phoneverify [dialCode]="dialCode" [phoneNumber]="account.phoneNumber" [isVerified]="isVerified"
+                  [isInValid]="phone.errors && (phone.dirty || phone.touched)" (approve)="onVerifyApprove($event)"></app-phoneverify>
+
+                  <!-- <input type="text" class="form-control" placeholder="{{'Enter your phone' | translate}}" required
+                    name="phoneNumber" [minlength]="9" [maxlength]="10" pattern="\d*" #phone="ngModel"
+                    (keypress)="onlyNumberKey($event)" [(ngModel)]="account.phoneNumber" /> -->
+
+                </div>
+                <small class="form-text text-muted" translate>We'll never share your phone with anyone else.</small>
+                <div *ngIf="phone.errors && (phone.touched || submitted)">
+                  <p [hidden]="!phone.errors.minlength" class="error" translate> Phone must be 9 characters </p>
+                  <p [hidden]="!phone.errors.pattern" class="error" translate> Phone must be number </p>
+                  <p [hidden]="!phone.errors.required" class="error" translate> Phone number is required </p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label translate class="required">Gender </label>
+              
+                <div>
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" value="male" required name="gender" #gender="ngModel" [(ngModel)]="account.gender">Male
+                    </label>
+                  </div>
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" value="female"  name="gender" [(ngModel)]="account.gender">Female
+                    </label>
+                  </div>
+                </div>
+                
+                <div *ngIf="gender.errors && (gender.dirty || gender.touched || submitted)">
+                  <p [hidden]="!gender.errors.required" class="error" translate> Gender is required </p>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label translate class="required">Password</label>
+                <input type="password" class="form-control" placeholder="{{'Enter your password' | translate}}"
+                  [minlength]="6" #password="ngModel" required name="password" [(ngModel)]="account.password" />
+                <div *ngIf="password.errors && (password.dirty || password.touched || submitted)">
+                  <p [hidden]="!password.errors.minlength" class="error" translate> Password must be at least 6
+                    characters! </p>
+                  <p [hidden]="!password.errors.required" class="error" translate> Password is required </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label translate class="required">Confirm Password</label>
+                <input type="password" class="form-control" placeholder="{{'Confirm your password' | translate}}"
+                  [minlength]="6" #rePassword="ngModel" required name="rePassword" [(ngModel)]="input.rePassword" />
+                <div *ngIf="rePassword.errors && (rePassword.dirty || rePassword.touched || submitted)">
+                  <p [hidden]="!rePassword.errors.minlength" class="error" translate> Confirm Password must be at least
+                    6 characters </p>
+                  <p [hidden]="!rePassword.errors.required" class="error" translate> Confirm Password is required </p>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn btn-success" type="submit" translate>Signup</button>
+                <a (click)="login()" class="color-dark pull-right underline" translate>Already have account?</a>
+              </div>
+            </form>
+          </article>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+

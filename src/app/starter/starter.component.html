@@ -1,0 +1,160 @@
+<app-banner (updateFields)="onUpdateFields($event)"></app-banner>
+
+<div class="padding-main">
+  <div class="container">
+    
+    <!-- <div class="row" style="margin-bottom: 25px;">
+        <div class="tab_btn" *ngFor="let item of transactionType" >
+          <button class="btn w-100" (click)="changeTransactionType(item._id)">{{item.name}}</button>
+        </div>
+    </div>     -->
+        
+
+    <div class="row" >
+      <!-- <div class="col-md-3">
+        <search-sidebar (updateFields)="onUpdateFields($event)"></search-sidebar>
+      </div> -->
+      <div class="col-md-12" *ngIf="!isLoading">
+
+        <div class="search-results"
+          infinite-scroll
+          [infiniteScrollDistance]="scrollDistance"
+          [infiniteScrollThrottle]="throttle"
+          (scrolled)="onScrollDown()">
+
+        <div class="filter-search row">
+          
+          <div class="pull-right form-inline col-md-9">
+                <button type="button" class="btn btn-info float-right pl-n1" style="margin-left: 20px;height: 35px;" (click)="openFilter()" *ngIf="isMobile">
+                  <i class="fa fa-filter" aria-hidden="true"></i>
+                </button>
+                <select class="select-1" (change)="changeDistance($event)" name="createdAt">
+                  <option value="Infinity" translate>All</option>
+                  <option value="10" translate>10 Km</option>
+                  <option value="20" translate>20 Km</option>
+                  <option value="50" translate>50 Km</option>
+                  <option value="100" translate>100 Km</option>
+                </select>
+                <select class="select-1" (change)="changeSort('createdAt', $event)" name="createdAt">
+                  <option value="" translate>Latest</option>
+                  <option value="asc" translate>Oldest to Newest</option>
+                  <option value="desc" translate>Newest to Oldest</option>
+
+                </select>
+                <select class="select-1" (change)="changeSort('salePrice', $event)" name="price">
+                  <option value="" translate>Price</option>
+                  <option value="asc" translate>Lowest to Highest</option>
+                  <option value="desc" translate>Highest to Lowest</option>
+                </select>
+          </div>
+          <div class="pull-left col-md-3">
+            <strong>{{total}}</strong>&nbsp;<span translate>Results</span>
+          </div>
+        </div>
+        <ul class="list-product row">
+          <div class="badge badge-warning" translate *ngIf="!total">No products found</div>
+          <li class="products-container p-2" *ngFor="let item of items">
+            <product-card [product]="item"></product-card>
+          </li>
+        </ul>
+        <!-- <div class="pull-right" *ngIf="total > itemsPerPage">
+          <ngb-pagination [pageSize]="itemsPerPage" [collectionSize]="total" [(page)]="page" [maxSize]="5" (pageChange)="query()"></ngb-pagination>
+        </div> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- <div class="padding-main">
+  <div class="container">
+    <div class="box-main-1">
+      <div class="title-main">
+        <h4 translate>Featured</h4>
+        <div class="list-view-all"><a [routerLink]="['/products/search']" [queryParams]="{featured: 1}" translate>View all</a></div>
+      </div>
+      <div class="body-box-main">
+        <featured-products [options]="{featured: 1}"></featured-products>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="padding-main">
+  <div class="container">
+    <div class="title-main">
+      <h4 translate>Daily Deal</h4>
+      <div class="list-view-all"><a [routerLink]="['/products/search']" [queryParams]="{dailyDeal: 1}" translate>View all</a></div>
+    </div>
+    <div class="body-box-main">
+      <featured-products [options]="{dailyDeal: 1, showDeal: 1}"></featured-products>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="padding-main feature-shop bg-cover" style="background: url(/assets/images/bg-1.jpg);">
+  <div class="container">
+    <h2 class="title-center" translate>Easy keeps you safe</h2>
+    <div class="row">
+      <div class="col-sm-4" *ngIf="appConfig && appConfig.securityIcon1">
+        <img [src]="appConfig.securityIcon1 ? appConfig.securityIcon1.iconUrl : '/assets/images/icon.png'">
+        <h4 translate>{{appConfig?.securityIcon1?.title}}</h4>
+        {{appConfig?.securityIcon1?.displayText}}
+      </div>
+      <div class="col-sm-4" *ngIf="appConfig && appConfig.securityIcon2">
+        <img [src]="appConfig.securityIcon2 ? appConfig.securityIcon2.iconUrl : '/assets/images/icon1.png'">
+        <h4 translate>{{appConfig?.securityIcon2?.title}}</h4>
+        {{appConfig?.securityIcon2?.displayText}}
+      </div>
+      <div class="col-sm-4" *ngIf="appConfig && appConfig.securityIcon3">
+        <img [src]="appConfig.securityIcon3 ? appConfig.securityIcon3.iconUrl : '/assets/images/icon2.png'">
+        <h4 translate>{{appConfig?.securityIcon3?.title}}</h4>
+        {{appConfig?.securityIcon3?.displayText}}
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="padding-main bg-grey">
+  <div class="container">
+    <div class="title-main">
+      <h4 translate>Best Sale</h4>
+      <div class="list-view-all"><a [routerLink]="['/products/search']" [queryParams]="{bestSell: 1}" translate>View all</a></div>
+    </div>
+    <div class="body-box-main">
+      <featured-products [options]="{bestSell: 1}"></featured-products>
+    </div>
+  </div>
+</div>
+<div class="padding-main bg-grey">
+  <div class="container">
+    <div class="title-main">
+      <h4 translate>Hottest</h4>
+      <div class="list-view-all"><a [routerLink]="['/products/search']" [queryParams]="{hot: 1}" translate>View all</a></div>
+    </div>
+    <div class="body-box-main">
+      <featured-products [options]="{hot: 1}"></featured-products>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="padding-main" *ngIf="shops.length">
+  <div class="container">
+    <div class="title-main">
+      <h4><span translate>Shops</span></h4>
+      <div class="list-view-all"><a appLocationHref [url]="'/shops/search'" translate>View all</a></div>
+    </div>
+    <ul class="list-product list-shop row">
+      <li class="col-sm-6" *ngFor="let shop of shops">
+        <shop-card [shop]="shop"></shop-card>
+      </li>
+    </ul>
+    <ngx-slick-carousel class="carousel carousel-row" #slickModal="slick-carousel" [config]="slideConfig">
+      <div ngxSlickItem *ngFor="let shop of shops" class="item-slider-pro">
+        <shop-card [shop]="shop"></shop-card>
+      </div>
+    </ngx-slick-carousel>
+  </div>
+</div> -->
+<!-- <div class="padding-main action-register bg-cover" style="background: url(/assets/images/bg-2.jpg);">
+  <div class="container">
+    <h2> <span translate>Start selling on</span> {{siteName}} </h2>
+    <p translate>Milions of shoppers can’t wait to see what you have in store.</p>
+    <a [href]="sellerUrl" target="_blank" class="button-action" translate>Become A Seller</a>
+  </div>
+</div> -->

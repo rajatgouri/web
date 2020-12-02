@@ -1,0 +1,45 @@
+<div class="header-bottom">
+  <div class="container">
+    <div class="nav-header">
+      <div class="category-top">
+        <!-- Click add class open-->
+        <div class="label-categories"><i class="fa fa-bars"></i>
+          <span translate >{{ selectedCategory.length > 20 ? (selectedCategory | slice: 0: 20 ) + '...' : selectedCategory }}</span>
+        </div>
+        <div class="show-categories">
+          <ul>
+            <li *ngFor="let item of tree">
+              <a class="dropdown-item" (click)="search(item)">{{item.name}}</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="mainmenu">
+        <ul class="nav navbar-nav navbar-collapse">
+          <li><a [routerLink]="['/']" [ngClass]="{'active': router.url === '/'}" translate>Home</a></li>
+          <li *ngFor="let item of transactionType">
+            <a (click)="changeTransactionType(item._id)">{{item.name}}</a>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row shadow-sm pt-1 w-100 ml-0 border" >
+  <div class="col-10 offset-1 ">
+    <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" >
+    <div ngxSlickItem *ngFor="let item of tree" class="slide">
+      <div class="bg-white" (click)="search(item)">
+        <div class=" d-flex justify-content-center">
+          <img [src]="item.mainImage.fileUrl" class="pointer" width="70" height="50">
+        </div>
+        <div class="text-center small text-primary line-initial mt-1 mb-1">
+          <a >{{item.name }}</a>
+        </div>
+      </div>
+    </div>
+    
+  </ngx-slick-carousel>
+  </div>
+</div>

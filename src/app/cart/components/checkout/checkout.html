@@ -1,0 +1,315 @@
+<div class="container">
+  <form #frm="ngForm" (submit)="submit(frm)">
+    <article class="card-body" id="cart_items">
+      <div class="row">
+        <div class="table-responsive cart_info">
+          <table class="table table-condensed">
+            <thead>
+              <tr class="cart_menu">
+                <td class="image">Image</td>
+                <td class="description" translate>Product</td>
+                <td class="price" translate>Price</td>
+                <td class="quantity" translate>Quantity</td>
+                <td class="total" translate>Total Price</td>
+                <td class="description" translate>Note</td>
+                <td translate>Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cart?.products; let i = index">
+                <td class="cart_product">
+                  <a appLocationHref [url]="'/products/' + item.product?.alias">
+                    <img [src]="item.product?.mainImage?.thumbUrl | checkPhoto" width="100px" />
+                  </a>
+                </td>
+                <td class="cart_description">
+                  <span *ngIf="item.product.transactiontype && item.product.transactiontype.name!=''">
+                    Product For {{item.product?.transactiontype?.name}}
+                  </span>
+                  <span *ngIf="!item.product.transactiontype || item.product.transactiontype.name ==''">
+                    Product For Buy
+                  </span>
+                  <h4>
+                    <a appLocationHref [url]="'/products/' + item.product?.alias"> {{item.product?.name}} </a>
+                  </h4>
+                  <p *ngFor="let option of item.variant?.options">
+                    <span>{{option.displayText || option.optionKey}}</span>: <span>{{option.value}}</span>
+                  </p>
+                  <p> {{item.product?.shortDescription}} </p>
+                  <p><span translate>Product ID</span>: {{item.product?._id}}</p>
+                  <p *ngIf="item?.startDate.length > 0">
+                    <span translate>Selected Date</span>:<br/>
+                    <b>{{item?.startDate | date:'MM/dd/yyyy'}} - {{item?.endDate | date:'MM/dd/yyyy'}}</b>
+                  </p>
+                </td>
+                <td class="cart_price">
+                  <span>
+                    <strong translate>Price</strong>: {{item.calculatedData?.product |
+                    priceCurrency:item.userCurrency}} </span> <br />
+                  <span>
+                    <strong translate>Tax</strong>: {{item.calculatedData?.tax | priceCurrency:item.userCurrency}}
+                  </span><br>
+                  <span>
+                  <strong translate *ngIf="item.calculatedData?.depositAmont > 0">Deposit Price</strong>: {{item.calculatedData?.depositAmont | priceCurrency:item.userCurrency}}
+                  </span><br>
+                  <strong translate class="label label-success" *ngIf="item.freeShip">Free Ship</strong>
+                  <span *ngIf="!item.freeShip">
+                      <strong translate>Shipping</strong>: {{item.calculatedData?.shipping | priceCurrency:item.userCurrency}}
+                    </span>
+                </td>
+                <td class="cart_quantity" >
+                  <ng-container *ngIf="!(item.product.transactiontype && (item.product.transactiontype.name =='Rent' || item.product.transactiontype.name =='Share'))">
+                  <input type="number" name="number{{i}}" class="form-control" [(ngModel)]="item.quantity" (change)="updateTotalPrice()"
+                    [disabled]="item.error" />
+                  <p *ngIf="item.error">
+                    <span translate class="label label-error">Out of stock</span>
+                    <span translate>Please remove this product from the cart!</span>
+                  </p>
+                  </ng-container>
+                </td>
+                <td class="cart_total"> {{item.calculatedData?.total | priceCurrency:item.userCurrency}} </td>
+                <td>
+                  <textarea rows="2" [(ngModel)]="item.userNote" name="userNote" class="form-control min-width-100"
+                    placeholder="{{'Enter your note' | translate}}"></textarea>
+                </td>
+                <td class="cart_delete">
+                  <a class="cart_quantity_delete" (click)="remove(i)"><i class="fa fa-times"></i></a>
+                </td>
+              </tr>
+              <tr *ngIf="!cart?.products?.length">
+                <td colspan="8">
+                  <p translate class="text-center">You have an empty cart. <a appLocationHref [url]="'/products/search'"><span
+                        translate>Shop now</span></a>
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+    <section id="do_action" *ngIf="cart?.products?.length">
+      <div class="container">
+        <div class="heading">
+          <h3 translate>Fill your information for the order</h3>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row total_area">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">First Name</label>
+                  <input class="form-control" [(ngModel)]="userInfo.firstName" required name="firstName" #firstName="ngModel" />
+                  <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched || isSubmitted)">
+                    <p [hidden]="!firstName.errors.required" class="error" translate> Please enter your first name! </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">Last Name</label>
+                  <input class="form-control" [(ngModel)]="userInfo.lastName" required name="lastName" #lastName="ngModel" />
+                  <div *ngIf="lastName.errors && (lastName.dirty || lastName.touched || isSubmitted)">
+                    <p [hidden]="!lastName.errors.required" class="error" translate> Please enter your last name! </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label translate class="required">Phone Number</label>
+                  <div class="input-group mb-3">
+                    <ngx-intl-tel-input class="dialphone"  [searchCountryFlag]="true"
+                        name="phone" required #phone="ngModel" [(ngModel)]="phoneNumber" (ngModelChange)="changePhoneNumber($event)">
+                    </ngx-intl-tel-input>
+                    <app-phoneverify  *ngIf="isVerifyButton" [phoneNumber]="phoneNumber" [isVerified]="isVerified"
+                    [isInValid]="phone.errors && (phone.dirty || phone.touched)" (approve)="onVerifyApprove($event)"></app-phoneverify>
+                  </div>
+                  <div *ngIf="phone.errors && (phone.dirty || phone.touched || isSubmitted)">
+                    <p [hidden]="!phone.errors.pattern" class="error" translate> Phone must be number </p>
+                    <p [hidden]="!phone.errors.required" class="error" translate> Phone number is required </p>
+                    <p [hidden]="!phone.errors.minlength" class="error" translate> Phone must be 9 characters </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label translate class="required">Email</label>
+                  <input class="form-control" [(ngModel)]="userInfo.email" required name="email" #email="ngModel"
+                    pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
+                  <div *ngIf="email.errors && (email.dirty || email.touched || isSubmitted)">
+                    <p [hidden]="!email.errors.required" class="error" translate> Please enter your email </p>
+                    <p [hidden]="!email.errors.pattern" class="error" translate> Please enter a valid email address </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">Street Address</label>
+                  <input class="form-control" [(ngModel)]="userInfo.streetAddress" required name="streetAddress"
+                    #streetAddress="ngModel" />
+                  <div *ngIf="streetAddress.errors && (streetAddress.dirty || streetAddress.touched || isSubmitted)">
+                    <p [hidden]="!streetAddress.errors.required" class="error" translate> Please enter your street
+                      address </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">City</label>
+                  <input class="form-control" [(ngModel)]="userInfo.city" required name="city" #city="ngModel" pattern="[A-Za-z\s]+" />
+                  <div *ngIf="city.errors && (city.dirty || city.touched || isSubmitted)">
+                    <p [hidden]="!city.errors.pattern" class="error" translate> 'City' field must contain only
+                      alphabets </p>
+                    <p [hidden]="!city.errors.required" class="error" translate> Please enter your city </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">State</label>
+                  <input class="form-control" [(ngModel)]="userInfo.state" required name="state" #state="ngModel"
+                    pattern="[A-Za-z\s]+" />
+                  <div *ngIf="state.errors && (state.dirty || state.touched || isSubmitted)">
+                    <p [hidden]="!state.errors.pattern" class="error" translate> 'State' field must contain only
+                      alphabets </p>
+                    <p [hidden]="!state.errors.required" class="error" translate> Please enter your state </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">Country</label>
+                  <select class="form-control" required name="country" #country="ngModel" [(ngModel)]="userInfo.country">
+                    <option value="">Select your country</option>
+                    <option [value]="country.isoCode" *ngFor="let country of countries">{{country.name}}</option>
+                  </select>
+                  <div *ngIf="country.errors && (country.dirty || country.touched || isSubmitted)">
+                    <p [hidden]="!country.errors.pattern" class="error" translate> 'Country' field must contain only
+                      alphabets </p>
+                    <p [hidden]="!country.errors.required" class="error" translate> Please select your country </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">Zip Code</label>
+                  <input class="form-control" [(ngModel)]="userInfo.zipCode" required name="zipCode" #zipCode="ngModel"
+                    (change)="updateTotalPrice()" />
+                  <div *ngIf="zipCode.errors && (zipCode.dirty || zipCode.touched || isSubmitted)">
+                    <p [hidden]="!zipCode.errors.required" class="error" translate> Please enter zip code! </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label translate class="required">Shipping Address</label>
+                  <input class="form-control" [(ngModel)]="userInfo.shippingAddress" required name="shippingAddress"
+                    #shippingAddress="ngModel" />
+                  <div *ngIf="shippingAddress.errors && (shippingAddress.dirty || shippingAddress.touched || isSubmitted)">
+                    <p [hidden]="!shippingAddress.errors.required" class="error" translate> Please enter shipping
+                      address! </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="total_area mar-0" [hidden]="paymentGateway.cod.enable || paymentGateway.paypal.enable || paymentGateway.stripe.enable">
+              <div class="text-center">
+                <h1 class="display-3" translate>Sorry!</h1>
+                <p class="lead" translate>The current system does not have any payment gateways available.</p>
+                <p class="lead" translate>Please come back later!</p>
+                <hr>
+                <p>
+                  <a translate>Have any problem?</a>&nbsp;<a href="/contact/us" translate>please contact with us</a>
+                </p>
+              </div>
+            </div>
+            <div class="row total_area mar-0" [hidden]="!paymentGateway.cod.enable && !paymentGateway.paypal.enable && !paymentGateway.stripe.enable">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label translate>Payment Method</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="mode" value="cod" id="cod" [(ngModel)]="userInfo.paymentMethod" (change)="changepaymentmethod($event)">
+                    <label class="form-check-label" for="cod" translate>
+                      Cash on delivery (COD)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="mode" id="paypal" value="paypal" [(ngModel)]="userInfo.paymentMethod" (change)="changepaymentmethod($event)">
+                    <label class="form-check-label" for="paypal" translate>
+                      Paypal
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="mode" id="stripe" value="stripe" [(ngModel)]="userInfo.paymentMethod" (change)="changepaymentmethod($event)">
+                    <label class="form-check-label" for="stripe" translate>
+                      Credit card
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12" *ngIf="userInfo.paymentMethod === 'stripe'">
+                <div [formGroup]="stripeTest">
+                  <div class="form-group">
+                    <label translate>Card holder name</label>
+                    <input type="text" formControlName="cardName" placeholder="Jane Doe" class="form-control" name="cardHolderName" />
+                  </div>
+                  <div class="form-group">
+                    <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label translate>Coupon</label>
+                  <div class="mb-3">
+                    <div class="input-group">
+                      <input name="coupon" [(ngModel)]="coupon" class="form-control" placeholder="{{'Enter coupon code here' | translate}}">
+                      <div class="input-group-prepend">
+                        <button class="btn btn-success" (click)="checkCoupon()" type="button">
+                          <span translate>Apply!</span>
+                        </button>
+                      </div>
+                    </div>
+                    <p><small translate>If you have a discount coupon, please enter it</small></p>
+                  </div>
+
+                </div>
+                <div class="form-group">
+                  <label translate>Summary</label>
+                  <p>
+                    <strong translate>Tax</strong>
+                    <span class="badge badge-success" *ngIf="!totalTaxPrice" translate>Free</span>
+                    <span *ngIf="totalTaxPrice && cart">{{totalTaxPrice | priceCurrency: cart.userCurrency}}</span>
+                  </p>
+                  <p>
+                    <strong translate>Shipping</strong>
+                    <span class="badge badge-success" *ngIf="!totalShippingPrice" translate>Free</span>
+                    <span *ngIf="totalShippingPrice && cart">{{totalShippingPrice | priceCurrency: cart.userCurrency}}</span>
+                  </p>
+                  <p>
+                    <strong translate>Discount</strong>
+                    <span *ngIf="totalDiscountPrice && cart">{{totalDiscountPrice | priceCurrency: cart.userCurrency}}</span>
+                  </p>
+                  <p>
+                    <strong translate>Deposit</strong>
+                    <span class="badge badge-success" *ngIf="!totalDepositPrice" translate>Free</span>
+                    <span *ngIf="totalDepositPrice && cart">{{totalDepositPrice | priceCurrency: cart.userCurrency}}</span>
+                  </p>
+                  <p>
+                    <strong translate>Total</strong>
+                    <span *ngIf="totalPrice && cart">{{totalPrice | priceCurrency: cart.userCurrency}}</span>
+                  </p>
+                  <p class="text-right">
+                    <button class="btn btn-warning" type="submit" translate>Check Out</button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </form>
+</div>

@@ -1,0 +1,51 @@
+<div class="filter-left">
+  <div class="box-left">
+    <h4 translate>Profile</h4>
+    <div class="list-categories">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item cate-list-items">
+          <a appLocationHref [url]="'/profile/update'">
+            <i class="fa fa-user"></i>&nbsp;
+            <span translate>Update</span>
+          </a>
+        </li>
+        <li class=" list-group-item cate-list-items">
+          <a appLocationHref [url]="'/orders/list'">
+            <i class="fa fa-shopping-cart"></i>&nbsp;
+            <span translate>Orders History</span>
+          </a>
+        </li>
+        <li class=" list-group-item cate-list-items">
+          <a appLocationHref [url]="'/donations/list'">
+            <i class="fa fa-money"></i>&nbsp;
+            <span translate>Donations</span>
+          </a>
+        </li>
+        <li class="list-group-item cate-list-items">
+          <a appLocationHref [url]="'/profile/wishlist'">
+            <i class="fa fa-heart"></i>&nbsp;
+            <span translate>Wish List</span>
+          </a>
+        </li>
+        <li class="list-group-item cate-list-items">
+          <a appLocationHref [url]="'/profile/refunds'">
+            <i class="fa fa-dollar"></i>&nbsp;&nbsp;
+            <span translate>Refund Requests</span>
+          </a>
+        </li>
+        <li class="list-group-item cate-list-items">
+          <a (click)="complain()">
+            <i class="fa fa-flag"></i>&nbsp;
+            <span translate>Complain</span>
+          </a>
+        </li>
+        <li class="list-group-item cate-list-items">
+          <a appLocationHref [url]="'/messages/conversations'">
+            <i class="fa fa-comments"></i>&nbsp;
+            <span translate>Message</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
